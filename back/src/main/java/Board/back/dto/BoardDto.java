@@ -15,13 +15,15 @@ public class BoardDto {
 	private String content;
 	private String author;
 	private Integer hits;
+	private String date;
 	
-	public Board board(String title, String content, String author) {
+	public Board board(String title, String content, String author,String date) {
 		return Board.builder()
 				.content(content)
 				.title(title)
 				.author(author)
 				.hits(0)
+				.date(date)
 				.build();
 	}
 }

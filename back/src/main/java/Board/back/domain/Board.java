@@ -37,6 +37,7 @@ public class Board {
 	@ColumnDefault("0")
 	@Column
     private Integer hits;
-
+	@Column
+	private String date;
 
 }

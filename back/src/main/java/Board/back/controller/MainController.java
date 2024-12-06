@@ -32,12 +32,6 @@ public class MainController {
 	@GetMapping("/getBoard")
 	public ResponseEntity<List<Board>> getBoard() {
 		List<Board> list = boardService.getBoardList();
-		for(Board board : list) {
-			System.out.println(board.getId());
-			System.out.println(board.getTitle());
-			System.out.println(board.getContent());
-            System.out.println("-------------------");
-		}
 		return ResponseEntity.ok(list);
 	}
 	
@@ -48,10 +42,7 @@ public class MainController {
 	
 	@PostMapping("/save-content")
 	public String save(@RequestBody BoardDto boardDto) {
-		System.out.println(boardDto.getAuthor());
-		System.out.println(boardDto.getContent());
-		System.out.println(boardDto.getTitle());
-		Board board = boardDto.board(boardDto.getTitle(), boardDto.getContent(), boardDto.getAuthor());
+		Board board = boardDto.board(boardDto.getTitle(), boardDto.getContent(), boardDto.getAuthor(),boardDto.getDate());
 		boardService.save(board);
 		return "작성완료";
 	}
