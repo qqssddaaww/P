@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "./list.scss";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Board } from "./interface";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "./store/store";
+import { saveBoard } from "./store/boardSlice";
+
+const date:Date = new Date();
+const year:number =date.getFullYear();
+const month:number =date.getMonth() + 1;
+const day:number =date.getDate();
+const formatDate:string = `${year}-${month}-${day}`;
 
 export default function Context() {
-  const [value, setValue] = useState<Board>({
-    title: "",
-    content: "",
-    author: "",
-  });
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-
+  
   const modules = {
     toolbar: {
       container: [
@@ -31,14 +36,15 @@ export default function Context() {
   };
 
   const handleSend = async () => {
-    setValue({
+    const value: Board = {
       title: title,
       content: content,
       author: "admin",
-    });
+      date: formatDate,
+    };
     try {
-      const res = await axios.post("http://localhost:8080/save-content", value);
-      console.log("res : "+ res.data);
+      await dispatch(saveBoard(value)).unwrap();
+      navigate("/")
     } catch (e) {
       console.log(e);
     }

@@ -42,8 +42,16 @@
 
 .link-div {
   @include center;
-  width: 100%;
 }
+
+.link-style {
+  @include center;
+  width:100px;
+  button {
+    width: 100%;
+  }
+}
+
 a:hover {
   color: black;
 }
@@ -63,36 +71,53 @@ a:visited {
 
 .list-title-div {
   @include center($flex-dire: row);
-  width: 80%;
+  width: 60%;
+  height: 50px;
+  font-weight: bold;
+  font-size: 16px;
   p {
     text-align: center;
+    margin: 0;
   }
   p:nth-child(1) {
-    width: 15%;
+    width: 5%;
   }
   p:nth-child(2) {
-    width: 50%;
+    width: 55%;
   }
   p:nth-child(3) {
-    width: 15%;
+    width: 10%;
+  }
+  p:nth-child(4) {
+    width: 20%;
+  }
+  p:nth-child(5) {
+    width: 10%;
   }
 }
 
 .list-content-div {
   @include center($flex-dire: row);
-  width: 80%;
+  width: 60%;
   height: 40px;
   p {
     text-align: center;
+    margin: 0;
   }
   p:nth-child(1) {
-    width: 15%;
+    width: 5%;
   }
   p:nth-child(2) {
-    width: 50%;
+    width: 55%;
     overflow: hidden;
   }
   p:nth-child(3) {
-    width: 15%;
+    width: 10%;
+  }
+  p:nth-child(4) {
+    width: 20%;
+  }
+  p:nth-child(5) {
+    width: 10%;
   }
 }
