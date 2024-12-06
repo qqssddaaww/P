@@ -1,10 +1,9 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./list.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./store/store";
-import { axiosBoard } from "./store/boardSlice";
-
+import { axiosBoard } from "./store/boardListSlice";
 
 export default function List() {
   // const [data, setData] = useState<Board[]>([{
@@ -24,19 +23,25 @@ export default function List() {
   //   res();
   // }, []);
   const dispatch = useDispatch<AppDispatch>();
-  const {boards, loading, error} = useSelector((state: RootState) => state.board);
-  
+  const { boards } = useSelector(
+    (state: RootState) => state.boards
+  );
+
   useEffect(() => {
     dispatch(axiosBoard());
   }, [dispatch]);
-
+  
   return (
     <div className="list-main-div">
       <div className="header-div">
         <h2>게시판</h2>
       </div>
       <div className="link-div">
-        <Link to={"/write"} style={{ textDecoration: "none"}} className="link-style">
+        <Link
+          to={"/write"}
+          style={{ textDecoration: "none" }}
+          className="link-style"
+        >
           <button className="link-button">작성</button>
         </Link>
       </div>
@@ -51,11 +56,13 @@ export default function List() {
         <div className="list-div">
           {boards.map((data) => (
             <div className="list-content-div">
-              <p>{data.id}</p>
-              <p>{data.title}</p>
-              <p>{data.author}</p>
-              <p>{data.date}</p>
-              <p>{data.hits}</p>
+              <Link to={`/view/${data.id}`} style={{ textDecoration: "none" }} className="list-content-link">
+                <p>{data.id}</p>
+                <p>{data.title}</p>
+                <p>{data.author}</p>
+                <p>{data.date}</p>
+                <p>{data.hits}</p>
+              </Link>
             </div>
           ))}
         </div>

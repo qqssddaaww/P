@@ -100,6 +100,13 @@ a:visited {
   @include center($flex-dire: row);
   width: 60%;
   height: 40px;
+  
+}
+.list-content-link {
+  @include center($flex-dire: row);
+  width: 100%;
+  height: 40px;
+  color: black;
   p {
     text-align: center;
     margin: 0;

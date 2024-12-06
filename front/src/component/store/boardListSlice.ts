@@ -32,8 +32,8 @@ export const saveBoard = createAsyncThunk(
   }
 );
 
-const boardSlice = createSlice({
-  name: "board",
+const boardListSlice = createSlice({
+  name: "boards",
   initialState,
   reducers: {
     // 필요한 경우 동기 액션을 추가할 수 있습니다.
@@ -73,4 +73,4 @@ const boardSlice = createSlice({
   },
 });
 
-export default boardSlice.reducer;
+export default boardListSlice.reducer;

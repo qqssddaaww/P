@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Board } from "./interface";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
-import { saveBoard } from "./store/boardSlice";
+import { saveBoard } from "./store/boardListSlice";
 
 const date:Date = new Date();
 const year:number =date.getFullYear();
