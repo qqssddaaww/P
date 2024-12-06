@@ -7,11 +7,11 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
 import { saveBoard } from "./store/boardListSlice";
 
-const date:Date = new Date();
-const year:number =date.getFullYear();
-const month:number =date.getMonth() + 1;
-const day:number =date.getDate();
-const formatDate:string = `${year}-${month}-${day}`;
+const date: Date = new Date();
+const year: number = date.getFullYear();
+const month: number = date.getMonth() + 1;
+const day: number = date.getDate();
+const formatDate: string = `${year}-${month}-${day}`;
 
 export default function Context() {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +19,7 @@ export default function Context() {
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-  
+
   const modules = {
     toolbar: {
       container: [
@@ -44,7 +44,7 @@ export default function Context() {
     };
     try {
       await dispatch(saveBoard(value)).unwrap();
-      navigate("/")
+      navigate("/");
     } catch (e) {
       console.log(e);
     }

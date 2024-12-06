@@ -23,14 +23,12 @@ export default function List() {
   //   res();
   // }, []);
   const dispatch = useDispatch<AppDispatch>();
-  const { boards } = useSelector(
-    (state: RootState) => state.boards
-  );
+  const { boards } = useSelector((state: RootState) => state.boards);
 
   useEffect(() => {
     dispatch(axiosBoard());
   }, [dispatch]);
-  
+
   return (
     <div className="list-main-div">
       <div className="header-div">
@@ -56,7 +54,11 @@ export default function List() {
         <div className="list-div">
           {boards.map((data) => (
             <div className="list-content-div">
-              <Link to={`/view/${data.id}`} style={{ textDecoration: "none" }} className="list-content-link">
+              <Link
+                to={`/view/${data.id}`}
+                style={{ textDecoration: "none" }}
+                className="list-content-link"
+              >
                 <p>{data.id}</p>
                 <p>{data.title}</p>
                 <p>{data.author}</p>

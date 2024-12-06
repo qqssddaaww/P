@@ -4,7 +4,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 
 export default function View() {
-  
   const { id } = useParams();
   const [board, setBoard] = useState<Board>();
 
@@ -30,5 +29,5 @@ export default function View() {
         hits : {board?.hits}
       </div>
     </>
-  )
+  );
 }
