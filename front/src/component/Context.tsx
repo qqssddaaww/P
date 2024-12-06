@@ -1,10 +1,19 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import ReactQuill from "react-quill";
-import "./board.scss";
+import "./list.scss";
 import axios from "axios";
+import { Link } from "react-router-dom";
+import { Board } from "./interface";
 
 export default function Context() {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<Board>({
+    title: "",
+    content: "",
+    author: "",
+  });
+
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
 
   const modules = {
     toolbar: {
@@ -17,26 +26,46 @@ export default function Context() {
       ],
     },
   };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
 
   const handleSend = async () => {
-    try{
-        const res = await axios.post('http://loaclhost:8080/get-content',value);
-        console.log(res)
+    setValue({
+      title: title,
+      content: content,
+      author: "admin",
+    });
+    try {
+      const res = await axios.post("http://localhost:8080/save-content", value);
+      console.log("res : "+ res.data);
     } catch (e) {
-        console.log(e)
-  }
-}
+      console.log(e);
+    }
+  };
   return (
-    <div className="content-box">
-      <div style={{height: 370}}>
-        <input type="text" placeholder="Title" className="title-input" />
+    <div className="content-main-box">
+      <div className="link-div">
+        <Link to={"/"} style={{ textDecoration: "none" }}>
+          <h2>게시판</h2>
+        </Link>
+      </div>
+      <div style={{ height: 370 }} className="content-box">
+        <input
+          type="text"
+          placeholder="Title"
+          className="title-input"
+          onChange={handleChange}
+        />
         <ReactQuill
           style={{ width: 1000, height: 300 }}
           modules={modules}
-          onChange={setValue}
+          onChange={setContent}
         />
       </div>
-      <button className="button-send" onClick={handleSend}>작성</button>
+      <button className="button-send" onClick={handleSend}>
+        작성
+      </button>
     </div>
   );
 }

@@ -2,14 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./list.scss";
+import { Board } from "./interface";
 
-interface Board {
-  id: number;
-  title: string;
-  content: string;
-  author: string;
-  hits: number;
-}
 
 export default function List() {
   const [data, setData] = useState<Board[]>([{
@@ -50,7 +44,7 @@ export default function List() {
             <div className="list-content-div">
               <p>{data.id}</p>
               <p>{data.title}</p>
-              <p>{data.author}</p>
+              <p>{data.content}</p>
             </div>
           ))}
         </div>
