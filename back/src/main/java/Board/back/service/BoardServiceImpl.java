@@ -27,6 +27,9 @@ public class BoardServiceImpl implements BoardService{
 		return boardRepository.findById(id);
 	}
 	
+	public void save(Board board) {
+		boardRepository.save(board);
+	}
 	
 	
 	

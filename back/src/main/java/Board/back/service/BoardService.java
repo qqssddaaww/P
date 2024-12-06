@@ -9,4 +9,5 @@ public interface BoardService {
 	List<Board> getBoardList();
 	
 	Optional<Board> getOne(Long id);
+	void save(Board board);
 }
