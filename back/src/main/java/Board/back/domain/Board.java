@@ -34,7 +34,6 @@ public class Board {
 	private String content;
 	@Column(nullable = false)
 	private String author;
-	@ColumnDefault("0")
 	@Column
     private Integer hits;
 	@Column

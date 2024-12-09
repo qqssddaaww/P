@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,19 +24,18 @@ import Board.back.service.BoardService;
 public class MainController {
 	
 	public final BoardService boardService;
-	
+
 	public MainController(BoardService boardService) {
 		this.boardService = boardService;
 	}
-	
-	
-	@GetMapping("/getBoard")
+
+	@GetMapping("/get-board")
 	public ResponseEntity<List<Board>> getBoard() {
 		List<Board> list = boardService.getBoardList();
 		return ResponseEntity.ok(list);
 	}
 	
-	@GetMapping("/getOne")
+	@GetMapping("/get-one")
 	public ResponseEntity<Optional<Board>> one(@RequestParam Long id) {
 		return ResponseEntity.ok(boardService.getOne(id));
 	}
@@ -45,5 +45,16 @@ public class MainController {
 		Board board = boardDto.board(boardDto.getTitle(), boardDto.getContent(), boardDto.getAuthor(),boardDto.getDate());
 		boardService.save(board);
 		return "작성완료";
+	}
+	@PostMapping("/delete-board")
+	public String delete(Long id) {
+		boardService.delete(id);
+		return "삭제 완료";
+	}
+
+	@GetMapping("/increase-hits")
+	public String increaseHits (Long id) {
+		boardService.increaseHits(id);
+		return "ok";
 	}
 }     
