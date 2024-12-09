@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ReactQuill from "react-quill";
 import "./list.scss";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,8 +9,10 @@ import { saveBoard } from "./store/boardListSlice";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
-const month: number = date.getMonth() + 1;
-const day: number = date.getDate();
+// const month: number = date.getMonth() + 1;
+// const day: number = date.getDate();
+const month: string = String(date.getMonth() + 1).padStart(2, "0");
+const day: string = String(date.getDate()).padStart(2, "0");
 const formatDate: string = `${year}-${month}-${day}`;
 
 export default function Context() {
@@ -19,6 +21,8 @@ export default function Context() {
 
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+
+  const quillRef = useRef<ReactQuill>(null);
 
   const modules = {
     toolbar: {
@@ -41,14 +45,22 @@ export default function Context() {
       content: content,
       author: "admin",
       date: formatDate,
+      hits: 0
+      // date: new Date().toISOString().split('T')[0],
     };
     try {
-      await dispatch(saveBoard(value)).unwrap();
-      navigate("/");
+      if (title === "" || content === "") {
+        alert("제목과 내용을 모두 입력하세요.");
+        return;
+      } else {
+        await dispatch(saveBoard(value)).unwrap();
+        navigate("/");
+      }
     } catch (e) {
       console.log(e);
     }
   };
+
   return (
     <div className="content-main-box">
       <div className="link-div">
@@ -60,16 +72,17 @@ export default function Context() {
         <input
           type="text"
           placeholder="Title"
-          className="title-input"
+          className="content-title-input"
           onChange={handleChange}
         />
         <ReactQuill
           style={{ width: 1000, height: 300 }}
           modules={modules}
           onChange={setContent}
+          ref={quillRef}
         />
       </div>
-      <button className="button-send" onClick={handleSend}>
+      <button className="content-button-send" onClick={handleSend}>
         작성
       </button>
     </div>

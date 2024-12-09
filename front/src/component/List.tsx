@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import "./list.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "./store/store";
-import { axiosBoard } from "./store/boardListSlice";
+import { axiosBoard, increaseHits } from "./store/boardListSlice";
 
 export default function List() {
   // const [data, setData] = useState<Board[]>([{
@@ -29,6 +29,9 @@ export default function List() {
     dispatch(axiosBoard());
   }, [dispatch]);
 
+  function handleHits(id: number | undefined) {
+    dispatch(increaseHits(id)); //
+  }
   return (
     <div className="list-main-div">
       <div className="header-div">
@@ -50,6 +53,7 @@ export default function List() {
           <p>작성자</p>
           <p>작성날짜</p>
           <p>조회수</p>
+
         </div>
         <div className="list-div">
           {boards.map((data) => (
@@ -58,12 +62,14 @@ export default function List() {
                 to={`/view/${data.id}`}
                 style={{ textDecoration: "none" }}
                 className="list-content-link"
+                onClick={() => handleHits(data.id)}
               >
                 <p>{data.id}</p>
                 <p>{data.title}</p>
                 <p>{data.author}</p>
                 <p>{data.date}</p>
                 <p>{data.hits}</p>
+                
               </Link>
             </div>
           ))}

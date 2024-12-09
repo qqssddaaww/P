@@ -3,7 +3,7 @@ export interface Board {
   title: string;
   content: string;
   author: string;
-  hits?: number;
+  hits: number;
   date?: string;
 }
 

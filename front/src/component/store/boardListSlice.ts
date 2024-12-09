@@ -12,7 +12,7 @@ export const axiosBoard = createAsyncThunk<Board[]>(
   "board/axiosBoard",
   async (): Promise<Board[]> => {
     try {
-      const res = await axios.get<Board[]>("http://localhost:8080/getBoard");
+      const res = await axios.get<Board[]>("http://localhost:8080/get-board");
       return res.data;
     } catch (e) {
       return e as Board[];
@@ -31,6 +31,20 @@ export const saveBoard = createAsyncThunk(
     }
   }
 );
+
+export const increaseHits = createAsyncThunk(
+  "board/increaseHits",
+  async(id : number | undefined): Promise<Board> => {
+    try {
+      const res = await axios.get(`http://localhost:8080/increase-hits?id=${id}`);
+      console.log("ok :"+res)
+      return res.data;
+
+    } catch (e) {
+      return e as Board;
+    }
+  }
+)
 
 const boardListSlice = createSlice({
   name: "boards",
@@ -69,7 +83,19 @@ const boardListSlice = createSlice({
       .addCase(saveBoard.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
+      
+      .addCase(increaseHits.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(increaseHits.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(increaseHits.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
   },
 });
 
