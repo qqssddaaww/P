@@ -3,6 +3,11 @@ package Board.back.service;
 import java.util.List;
 import java.util.Optional;
 
+import Board.back.dto.BoardDto;
+import Board.back.dto.ChangeDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -49,5 +54,22 @@ public class BoardServiceImpl implements BoardService{
 		save(board.get());
 	}
 
-	
+	@Override
+	public Page<Board> boardPage(int page, int size) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+		Page<Board> boardPage = boardRepository.findAll(pageable);
+		return boardPage;
+	}
+
+	@Override
+	public Board change(ChangeDto changeDto) {
+		Optional<Board> board = getOne(changeDto.getId());
+		Board changeBoard = board.get();
+		changeBoard.setDate(changeDto.getDate());
+		changeBoard.setTitle(changeDto.getTitle());
+		changeBoard.setContent(changeDto.getContent());
+		save(changeBoard);
+
+		return changeBoard;
+	}
 }

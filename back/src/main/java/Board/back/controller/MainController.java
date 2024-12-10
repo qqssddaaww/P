@@ -3,6 +3,8 @@ package Board.back.controller;
 import java.util.List;
 import java.util.Optional;
 
+import Board.back.dto.ChangeDto;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,6 +36,12 @@ public class MainController {
 		List<Board> list = boardService.getBoardList();
 		return ResponseEntity.ok(list);
 	}
+
+	@GetMapping("/page-board")
+	public ResponseEntity<List<Board>> getBoard(@RequestParam(defaultValue = "0") int page, @RequestParam int size) {
+		Page<Board> boardPage = boardService.boardPage(page, size);
+		return ResponseEntity.ok(boardPage.getContent());
+	}
 	
 	@GetMapping("/get-one")
 	public ResponseEntity<Optional<Board>> one(@RequestParam Long id) {
@@ -56,5 +64,10 @@ public class MainController {
 	public String increaseHits (Long id) {
 		boardService.increaseHits(id);
 		return "ok";
+	}
+	@PostMapping("/change-board")
+	public ResponseEntity<Board> changeBoard(@RequestBody ChangeDto changeDto) {
+		Board board = boardService.change(changeDto);
+		return ResponseEntity.ok(board);
 	}
 }     
