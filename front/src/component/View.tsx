@@ -38,7 +38,7 @@ export default function View() {
   }
 
   const handleChange = () => {
-    
+    navigate(`/write`, {state : {title: board.title, content : board.content, id: id}})
   }
   return (
     <>

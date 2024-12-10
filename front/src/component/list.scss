@@ -5,29 +5,56 @@
   align-items: center;
   justify-content: center;
 }
+@mixin link-div($align : center) {
+  @include center();
+  width: 60%;
+  align-items: $align;
+}
 
 ////////////////////// context.tsx
 .content-main-box {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+.content-link-div {
+  @include link-div($align: flex-start)
 }
 .content-box {
   @include center();
+  width: 60%;
+  height: 610px;
 }
 
 .content-title-input {
-  border: none;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 7px;
+  width: 100%;
+  height: 40px;
+  padding: 0;
+}
+.content-react-quill {
+  width:100%;
+  height: 90%;
+}
+
+.content-button-div {
+  height: 20%;
 }
 
 .content-button-send {
   @include center();
   border: 1px solid grey;
   background-color: honeydew;
-  width: 1000px;
+  width: 60%;
   height: 30px;
   border-radius: 8px;
-  margin-top: 20px;
 }
+
 
 /////////////////////// list.tsx
 .list-main-div {
@@ -36,15 +63,18 @@
   // @include center
 }
 
-.link-div {
-  @include center;
+.list-link-div {
+  @include link-div($align: flex-end)
 }
 
-.link-style {
-  @include center;
+.list-link-style {
   width: 100px;
   button {
     width: 100%;
+    height: 30px;
+    border-radius: 7px;
+    border: 1px solid #ccc;
+
   }
 }
 
@@ -55,9 +85,10 @@ a:visited {
   color: black;
 }
 
-.header-div {
-  @include center($margin: 0);
-  width: 100%;
+.list-header-div {
+  @include center();
+  align-items: flex-start;
+  width: 60%;
   height: 100px;
 }
 
@@ -71,6 +102,7 @@ a:visited {
   height: 50px;
   font-weight: bold;
   font-size: 16px;
+  border-bottom: 1px solid rgba($color: grey, $alpha: 0.3);
   p {
     text-align: center;
     margin: 0;
@@ -99,6 +131,7 @@ a:visited {
   @include center($flex-dire: row);
   width: 60%;
   height: 40px;
+  border-bottom: 1px solid rgba($color: grey, $alpha: 0.3);
 }
 .list-content-link {
   @include center($flex-dire: row);
