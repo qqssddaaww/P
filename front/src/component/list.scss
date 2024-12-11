@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
 }
-@mixin link-div($align : center) {
+@mixin link-div($align: center) {
   @include center();
   width: 60%;
   align-items: $align;
@@ -21,7 +21,7 @@
   padding: 0;
 }
 .content-link-div {
-  @include link-div($align: flex-start)
+  @include link-div($align: flex-start);
 }
 .content-box {
   @include center();
@@ -38,7 +38,7 @@
   padding: 0;
 }
 .content-react-quill {
-  width:100%;
+  width: 100%;
   height: 90%;
 }
 
@@ -55,7 +55,6 @@
   border-radius: 8px;
 }
 
-
 /////////////////////// list.tsx
 .list-main-div {
   width: 100%;
@@ -64,7 +63,7 @@
 }
 
 .list-link-div {
-  @include link-div($align: flex-end)
+  @include link-div($align: flex-end);
 }
 
 .list-link-style {
@@ -74,7 +73,6 @@
     height: 30px;
     border-radius: 7px;
     border: 1px solid #ccc;
-
   }
 }
 

@@ -6,18 +6,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Board, chBoard } from "./interface";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./store/store";
-import { changeBoard, saveBoard } from "./store/boardListSlice";
+import { changeBoard, saveBoard } from "./store/AsyncThunk";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
-// const month: number = date.getMonth() + 1;
-// const day: number = date.getDate();
 const month: string = String(date.getMonth() + 1).padStart(2, "0");
 const day: string = String(date.getDate()).padStart(2, "0");
 const formatDate: string = `${year}-${month}-${day}`;
 // date: new Date().toISOString().split('T')[0],
 
-export default function Context() {
+export default function Write() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -35,8 +33,8 @@ export default function Context() {
     ...(state?.id && { id: state.id }),
     title: title,
     content: content,
-    date:  formatDate,
-  }
+    date: formatDate,
+  };
   useEffect(() => {
     if (state) {
       setContent(state.content);
@@ -46,13 +44,7 @@ export default function Context() {
 
   const modules = {
     toolbar: {
-      container: [
-        [{ header: [1, 2, 3, 4, 5, false] }],
-        ["bold", "underline", "strike"],
-        ["blockquote", "code-block"],
-        ["image"],
-        ["clean"],
-      ],
+      container: [[{ header: [1, 2, 3, 4, 5, false] }], ["bold", "underline", "strike"], ["blockquote", "code-block"], ["image"], ["clean"]],
     },
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,36 +77,16 @@ export default function Context() {
         </Link>
       </div>
       <div className="content-box">
-        <input
-          type="text"
-          placeholder="Title"
-          className="content-title-input"
-          value={title}
-          onChange={handleChange}
-        />
-
-        <ReactQuill
-          className="content-react-quill"
-          modules={modules}
-          onChange={setContent}
-          value={content}
-        />
+        <input type="text" placeholder="Title" className="content-title-input" value={title} onChange={handleChange} />
+        <ReactQuill className="content-react-quill" modules={modules} onChange={setContent} value={content} />
       </div>
       <div className="content-button-div">
         {state ? (
-          <button
-            className="content-button-send"
-            name="change"
-            onClick={handleSend}
-          >
+          <button className="content-button-send" name="change" onClick={handleSend}>
             수정
           </button>
         ) : (
-          <button
-            className="content-button-send"
-            name="save"
-            onClick={handleSend}
-          >
+          <button className="content-button-send" name="save" onClick={handleSend}>
             작성
           </button>
         )}

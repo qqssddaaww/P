@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import List from "./component/List";
-import Context from "./component/Context";
 import View from "./component/View";
+import Write from "./component/Write";
 
 export default function App() {
   return (
@@ -9,7 +9,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<List />} />
-          <Route path="/write" element={<Context />} />
+          <Route path="/write" element={<Write />} />
           <Route path="/view/:id" element={<View />} />
         </Routes>
       </BrowserRouter>

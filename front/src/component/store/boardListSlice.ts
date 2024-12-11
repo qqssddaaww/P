@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
-import { Board, BoardState, chBoard, param } from "../interface";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Board, BoardState } from "../interface";
+import { axiosBoard, changeBoard, increaseHits, pageBoard, saveBoard } from "./AsyncThunk";
 
 const initialState: BoardState = {
   boards: [],
@@ -9,72 +9,19 @@ const initialState: BoardState = {
   size: 0,
 };
 
-export const axiosBoard = createAsyncThunk<Board[]>(
-  "board/axiosBoard",
-  async (): Promise<Board[]> => {
-    try {
-      const res = await axios.get<Board[]>("http://localhost:8080/get-board");
-      return res.data;
-    } catch (e) {
-      return e as Board[];
-    }
-  }
-);
+const pending = (state: BoardState) => {
+  state.loading = true;
+  state.error = null;
+};
 
-export const pageBoard = createAsyncThunk<Board[], param>(
-  "board/pageBoard",
-  async (params: param): Promise<Board[]> => {
-    try {
-      const res = await axios.get<Board[]>(
-        `http://localhost:8080/page-board?page=${params.page - 1}&size=${
-          params.size
-        }`
-      );
-      console.dir(res.data);
-      return res.data;
-    } catch (e) {
-      return e as Board[];
-    }
+const rejected = (state: BoardState, action: PayloadAction<Error | undefined>) => {
+  state.loading = false;
+  if (action.payload) {
+    state.error = action.payload;
+  } else {
+    state.error = new Error("Unknown error");
   }
-);
-
-export const saveBoard = createAsyncThunk(
-  "board/saveBoard",
-  async (value: Board) => {
-    try {
-      const res = await axios.post("http://localhost:8080/save-content", value);
-      return res.data;
-    } catch (e) {
-      return e;
-    }
-  }
-);
-export const changeBoard = createAsyncThunk(
-  "board/changeBoard",
-  async (value: chBoard) => {
-    try {
-      const res = await axios.post("http://localhost:8080/change-board", value);
-      return res.data;
-    } catch (e) {
-      return e;
-    }
-  }
-);
-
-export const increaseHits = createAsyncThunk(
-  "board/increaseHits",
-  async (id: number | undefined): Promise<Board> => {
-    try {
-      const res = await axios.get(
-        `http://localhost:8080/increase-hits?id=${id}`
-      );
-      console.log("ok :" + res);
-      return res.data;
-    } catch (e) {
-      return e as Board;
-    }
-  }
-);
+};
 
 const boardListSlice = createSlice({
   name: "boards",
@@ -84,70 +31,46 @@ const boardListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // axios Thunk 처리
-      .addCase(axiosBoard.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        axiosBoard.fulfilled,
-        (state, action: PayloadAction<Board[]>) => {
-          state.loading = false;
-          state.boards = action.payload;
-        }
-      )
-      .addCase(axiosBoard.rejected, (state, action) => {
+      // 전체 DB 사이즈를 초기화
+      .addCase(axiosBoard.pending, pending)
+      .addCase(axiosBoard.fulfilled, (state, action: PayloadAction<number>) => {
         state.loading = false;
-        state.error = action.payload as string;
+        state.size = action.payload;
       })
+      .addCase(axiosBoard.rejected, rejected)
 
+      // 페이지네이션 후 boards 초기화
+      .addCase(pageBoard.pending, pending)
       .addCase(pageBoard.fulfilled, (state, action: PayloadAction<Board[]>) => {
         state.loading = false;
         state.boards = action.payload;
       })
-      // 제목 or 내용 변경 처리 
-      .addCase(changeBoard.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(changeBoard.fulfilled, (state,action: PayloadAction<Board>) => {
+      .addCase(pageBoard.rejected, rejected)
+
+      // 제목 or 내용 변경 처리
+      .addCase(changeBoard.pending, pending)
+      .addCase(changeBoard.fulfilled, (state, action: PayloadAction<Board>) => {
         state.loading = false;
         const updatedBoard = action.payload;
         // 상태 데이터에서 변경된 항목만 업데이트
-        state.boards = state.boards.map((board) =>
-          board.id === updatedBoard.id ? updatedBoard : board
-        );
+        state.boards = state.boards.map((board) => (board.id === updatedBoard.id ? updatedBoard : board));
       })
-      .addCase(changeBoard.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
+      .addCase(changeBoard.rejected, rejected)
 
       // saveBoard Thunk 처리
-      .addCase(saveBoard.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      .addCase(saveBoard.pending, pending)
       .addCase(saveBoard.fulfilled, (state, action: PayloadAction<Board>) => {
         state.loading = false;
         state.boards.push(action.payload);
       })
-      .addCase(saveBoard.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
+      .addCase(saveBoard.rejected, rejected)
 
-      .addCase(increaseHits.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
+      // 조회수 증가 처리
+      .addCase(increaseHits.pending, pending)
       .addCase(increaseHits.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(increaseHits.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
+      .addCase(increaseHits.rejected, rejected);
   },
 });
 

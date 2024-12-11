@@ -12,7 +12,7 @@ export default function View() {
     title: "",
     content: "",
     author: "",
-    hits: 0
+    hits: 0,
   });
 
   useEffect(() => {
@@ -35,11 +35,11 @@ export default function View() {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const handleChange = () => {
-    navigate(`/write`, {state : {title: board.title, content : board.content, id: id}})
-  }
+    navigate(`/write`, { state: { title: board.title, content: board.content, id: id } });
+  };
   return (
     <>
       <div className="view-main-div">
@@ -54,8 +54,16 @@ export default function View() {
           <div className="view-title-div">
             <div>{board?.title}</div>
             <div>
-              <div><button className="view-change-button" onClick={handleChange}>수정</button></div>
-              <div><button className="view-delete-button" onClick={handleDelete}>삭제</button></div>
+              <div>
+                <button className="view-change-button" onClick={handleChange}>
+                  수정
+                </button>
+              </div>
+              <div>
+                <button className="view-delete-button" onClick={handleDelete}>
+                  삭제
+                </button>
+              </div>
               {board?.date}
             </div>
           </div>
