@@ -7,6 +7,7 @@ const initialState: BoardState = {
   loading: false,
   error: null,
   size: 0,
+
 };
 
 const pending = (state: BoardState) => {
@@ -70,7 +71,7 @@ const boardListSlice = createSlice({
       .addCase(increaseHits.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(increaseHits.rejected, rejected);
+      .addCase(increaseHits.rejected, rejected)
   },
 });
 

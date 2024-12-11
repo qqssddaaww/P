@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Board } from "./interface";
+import { Board } from "../interface";
 import axios from "axios";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import "./list.scss";
+import "./css/list.scss";
 import DOMPurify from "dompurify";
 
 export default function View() {
@@ -14,6 +14,7 @@ export default function View() {
     author: "",
     hits: 0,
   });
+
 
   useEffect(() => {
     const board = async () => {

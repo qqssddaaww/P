@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import "./list.scss";
+import "./css/list.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "./store/store";
+import { AppDispatch, RootState } from "../store/store";
 import Pagination from "./Pagination";
-import { axiosBoard, increaseHits, pageBoard } from "./store/AsyncThunk";
+import { axiosBoard, increaseHits, pageBoard } from "../store/AsyncThunk";
 
 export default function List() {
   const dispatch = useDispatch<AppDispatch>();

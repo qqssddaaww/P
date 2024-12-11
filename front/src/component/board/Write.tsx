@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
-import "./list.scss";
-import "./ql.scss";
+import "./css/list.scss";
+import "./css/ql.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Board, chBoard } from "./interface";
+import { Board, chBoard } from "../interface";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "./store/store";
-import { changeBoard, saveBoard } from "./store/AsyncThunk";
+import { AppDispatch } from "../store/store";
+import { changeBoard, saveBoard } from "../store/AsyncThunk";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();

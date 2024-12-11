@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import List from "./component/List";
-import View from "./component/View";
-import Write from "./component/Write";
+import List from "./component/board/List";
+import View from "./component/board/View";
+import Write from "./component/board/Write";
 
 export default function App() {
   return (

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Props } from "./interface";
-import styles from "./pagination.module.scss";
+import { Props } from "../interface";
+import styles from "./css/pagination.module.scss";
 
 export default function Pagination({ totalItems, itemCountPerPage, pageCount, currentPage }: Props) {
   const totalPages = Math.ceil(totalItems / itemCountPerPage);
