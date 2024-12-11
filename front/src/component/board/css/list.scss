@@ -1,9 +1,9 @@
-@mixin center($margin: 0 auto, $flex-dire: column) {
+@mixin center($margin: 0 auto, $flex-dire: column, $justify: center) {
   margin: $margin;
   display: flex;
   flex-direction: $flex-dire;
   align-items: center;
-  justify-content: center;
+  justify-content: $justify;
 }
 @mixin link-div($align: center) {
   @include center();
@@ -11,8 +11,19 @@
   align-items: $align;
 }
 
+
+
+.header-div {
+  @include center();
+  align-items: flex-start;
+  position: relative;
+  width: 60%;
+  height: 100px;
+  border-bottom: 1px solid #ccc;
+}
+
 ////////////////////// context.tsx
-.content-main-box {
+.write-main-box {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -20,16 +31,13 @@
   margin: 0;
   padding: 0;
 }
-.content-link-div {
-  @include link-div($align: flex-start);
-}
-.content-box {
+.write-box {
   @include center();
   width: 60%;
   height: 610px;
 }
 
-.content-title-input {
+.write-title-input {
   border: 1px solid #ccc;
   margin-bottom: 10px;
   border-radius: 7px;
@@ -37,16 +45,16 @@
   height: 40px;
   padding: 0;
 }
-.content-react-quill {
+.write-react-quill {
   width: 100%;
   height: 90%;
 }
 
-.content-button-div {
+.write-button-div {
   height: 20%;
 }
 
-.content-button-send {
+.write-button-send {
   @include center();
   border: 1px solid grey;
   background-color: honeydew;
@@ -86,8 +94,25 @@ a:visited {
 .list-header-div {
   @include center();
   align-items: flex-start;
+  position: relative;
   width: 60%;
   height: 100px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  div {
+    position: absolute;
+    width: 10%;
+    left: 90%;
+  }
+}
+.list-login-button {
+  width: 100%;
+  border: none;
+  border-radius: 7px;
+  background-color: black;
+  color: white;
+  height: 25px;
+  
 }
 
 .list-div {
@@ -120,9 +145,7 @@ a:visited {
   p:nth-child(5) {
     width: 10%;
   }
-  // p:nth-child(6) {
-  //   width: 5%;
-  // }
+
 }
 
 .list-content-div {
@@ -162,30 +185,41 @@ a:visited {
   width: 100%;
   height: 100vh;
 }
-.view-link-div {
-  @include center();
-  width: 60%;
-}
-
 .view-title-div {
   @include center($flex-dire: row);
   width: 60%;
-  div:nth-child(1) {
-    width: 70%;
-  }
+  height: 7%;
+}
+.view-realTitle-div {
+  width: 60%;;
+}
+.view-title-side-div {
+  width: 40%;
+  text-align: right;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.view-change-delete-div {
+  width: 10%;
+}
+
+.view-date-div {
+  width: 100%;
+}
+.view-2button-div {
+  @include center($flex-dire: row);
+  justify-content: flex-end;
+  width: 60%;
+
   div:nth-child(2) {
-    width: 30%;
-    text-align: right;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    div {
-      width: 20%;
-      margin-right: 20px;
-    }
+    width: 10px;
   }
 }
+
 .view-change-button {
+  width: 100%;
   border: 1px solid blue;
   background-color: blue;
   color: white;
@@ -193,24 +227,68 @@ a:visited {
 }
 
 .view-delete-button {
+  width: 100%;
   border: 1px solid red;
   background-color: red;
   border-radius: 4px;
 }
 
 .view-content-div {
-  @include center();
+  @include center($justify: flex-start);
   width: 60%;
-  height: 80vh;
+  height: 60vh;
   border: 1px solid black;
   border-radius: 5px;
-  justify-content: flex-start;
   align-items: flex-start;
   margin-top: 10px;
+  margin-bottom : 10px;
+
   * {
     width: 100%;
     margin: 5px 0 0 5px;
     font-size: 12px;
     overflow-y: auto;
   }
+}
+
+//////////////////// login.tsx
+
+.login-main-div {
+  width: 100%;
+  height: 100vh;
+}
+.login-content-div {
+  @include center();
+  width: 60%;
+  height: 500px;
+  // border: 1px solid black;
+}
+
+.login-input-div {
+  @include center($justify: baseline);
+  width: 30%;
+  height: 70%;
+  div {
+    display: flex;
+    div {
+      width: 10px;
+    }
+  }
+
+}
+.login-input-style {
+  margin: 0 0 10px 0;
+  border-radius: 7px;
+  border: 1px solid #ccc;
+  width: 90%;
+  height: 10%;
+  padding-left: 10px;
+}
+.login-button-style {
+  border-radius: 7px;
+  border: none;
+  background-color: black;
+  color: white;
+  width: 100px;
+  height: 25px;
 }

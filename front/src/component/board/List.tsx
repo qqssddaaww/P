@@ -17,7 +17,6 @@ export default function List() {
     size: 15,
   };
   useEffect(() => {
-    // dispatch(sizeBoard())
     dispatch(axiosBoard());
     dispatch(pageBoard(param));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,7 +29,13 @@ export default function List() {
     <div className="list-main-div">
       <div className="list-header-div">
         <h2>게시판</h2>
+        <div>
+          <Link to={"/login"} style={{textDecoration: 'none'}}>
+            <button className="list-login-button">로그인</button>
+          </Link>
+        </div>
       </div>
+      
       {true ? (
         <div className="list-link-div">
           <Link to={"/write"} style={{ textDecoration: "none" }} className="list-link-style">

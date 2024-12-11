@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "./css/list.scss";
 import "./css/ql.scss";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import { Board, chBoard } from "../interface";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
@@ -68,25 +68,21 @@ export default function Write() {
       console.log(e);
     }
   };
+  console.log(content) 
 
   return (
-    <div className="content-main-box">
-      <div className="content-link-div">
-        <Link to={"/"} style={{ textDecoration: "none" }}>
-          <h2>게시판</h2>
-        </Link>
+    <div className="write-main-box">
+      <div className="write-box">
+        <input type="text" placeholder="Title" className="write-title-input" value={title} onChange={handleChange} />
+        <ReactQuill className="write-react-quill" modules={modules} onChange={setContent} value={content} />
       </div>
-      <div className="content-box">
-        <input type="text" placeholder="Title" className="content-title-input" value={title} onChange={handleChange} />
-        <ReactQuill className="content-react-quill" modules={modules} onChange={setContent} value={content} />
-      </div>
-      <div className="content-button-div">
+      <div className="write-button-div">
         {state ? (
-          <button className="content-button-send" name="change" onClick={handleSend}>
+          <button className="write-button-send" name="change" onClick={handleSend}>
             수정
           </button>
         ) : (
-          <button className="content-button-send" name="save" onClick={handleSend}>
+          <button className="write-button-send" name="save" onClick={handleSend}>
             작성
           </button>
         )}
