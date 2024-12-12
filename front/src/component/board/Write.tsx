@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "./css/list.scss";
 import "./css/ql.scss";
-import {  useLocation, useNavigate } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router";
 import { Board, chBoard } from "../interface";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/store";
 import { changeBoard, saveBoard } from "../store/AsyncThunk";
 
 const date: Date = new Date();
@@ -22,15 +22,18 @@ export default function Write() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const { state } = useLocation();
+  const { user } = useSelector((state: RootState) => state.user) 
+
   const value: Board = {
+    id: user.id,
     title: title,
     content: content,
-    author: "admin",
+    author: user.name,
     date: formatDate,
     hits: 0,
   };
   const valueCh: chBoard = {
-    ...(state?.id && { id: state.id }),
+    ...(state?.uid && { uid: state.uid }),
     title: title,
     content: content,
     date: formatDate,
@@ -62,14 +65,12 @@ export default function Write() {
         } else if (e.currentTarget.name === "change") {
           dispatch(changeBoard(valueCh)).unwrap();
         }
-        navigate("/");
+        navigate("/", { replace: true });
       }
     } catch (e) {
       console.log(e);
     }
   };
-  console.log(content) 
-
   return (
     <div className="write-main-box">
       <div className="write-box">

@@ -1,15 +1,17 @@
 import { useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router";
 import "./css/list.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import Pagination from "./Pagination";
 import { axiosBoard, increaseHits, pageBoard } from "../store/AsyncThunk";
+import { logoutUser } from "../store/userSlice";
 
 export default function List() {
   const dispatch = useDispatch<AppDispatch>();
   const { boards } = useSelector((state: RootState) => state.boards);
   const size = useSelector((state: RootState) => state.boards.size);
+  const { user } = useSelector((state: RootState) => state.user);
   const [searchParams] = useSearchParams();
   const page = searchParams.get("page");
   const param = {
@@ -22,20 +24,27 @@ export default function List() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, page]);
 
-  function handleHits(id: number | undefined) {
-    dispatch(increaseHits(id)); //
+  function handleHits(uid: number | undefined) {
+    dispatch(increaseHits(uid)); //
+  }
+  const handlelogout = () => {
+    dispatch(logoutUser());
   }
   return (
     <div className="list-main-div">
       <div className="list-header-div">
         <h2>게시판</h2>
         <div>
-          <Link to={"/login"} style={{textDecoration: 'none'}}>
-            <button className="list-login-button">로그인</button>
-          </Link>
+          {user.id === "" ? (
+            <Link to={"/login"} style={{ textDecoration: "none" }}>
+              <button className="list-login-button">로그인</button>
+            </Link>
+          ) : (
+            <button className="list-login-button" onClick={handlelogout}>{user.name}</button>
+          )}
         </div>
       </div>
-      
+
       {true ? (
         <div className="list-link-div">
           <Link to={"/write"} style={{ textDecoration: "none" }} className="list-link-style">
@@ -56,9 +65,9 @@ export default function List() {
         </div>
         <div className="list-div">
           {boards.map((data) => (
-            <div className="list-content-div">
-              <Link to={`/view/${data.id}`} style={{ textDecoration: "none" }} className="list-content-link" onClick={() => handleHits(data.id)}>
-                <p>{data.id}</p>
+            <div className="list-content-div" key={data.uid}>
+              <Link to={`/view/${data.uid}`} style={{ textDecoration: "none" }} className="list-content-link" onClick={() => handleHits(data.uid)}>
+                <p>{data.uid}</p>
                 <p>{data.title}</p>
                 <p>{data.author}</p>
                 <p>{data.date}</p>

@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { Board } from "../interface";
 import axios from "axios";
-import {  useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/store";
 
 export default function View() {
-  const { id } = useParams();
+  const { uid } = useParams();
   const navigate = useNavigate();
+  const { user } = useSelector((state: RootState) => state.user);
   const [board, setBoard] = useState<Board>({
+    id: "",
     title: "",
     content: "",
     author: "",
@@ -18,19 +22,18 @@ export default function View() {
   useEffect(() => {
     const board = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/get-one?id=${id}`);
+        const res = await axios.get(`http://localhost:8080/get-one?uid=${uid}`);
         setBoard(res.data);
       } catch (e) {
         console.log(e);
       }
     };
     board();
-  }, [id]);
+  }, [uid]);
 
   const handleDelete = async () => {
     try {
-      const deleteBoard = await axios.post(`http://localhost:8080/delete-board?id=${id}`);
-      console.log(deleteBoard);
+      const deleteBoard = await axios.post(`http://localhost:8080/delete-board?uid=${uid}`);
       navigate("/");
     } catch (e) {
       console.log(e);
@@ -38,12 +41,11 @@ export default function View() {
   };
 
   const handleChange = () => {
-    navigate(`/write`, { state: { title: board.title, content: board.content, id: id } });
+    navigate(`/write`, { state: { title: board.title, content: board.content, uid: uid } });
   };
   return (
     <>
       <div className="view-main-div">
-
         <div className="view-title-div">
           <div className="view-realTitle-div">
             <h2>{board?.title}</h2>
@@ -58,7 +60,7 @@ export default function View() {
           }}
           className="view-content-div"
         ></div>
-        { true ?
+        {true ? (
           <div className="view-2button-div">
             <div className="view-change-delete-div">
               <button className="view-change-button" onClick={handleChange}>
@@ -72,8 +74,9 @@ export default function View() {
               </button>
             </div>
           </div>
-          : <></>
-        }
+        ) : (
+          <></>
+        )}
       </div>
     </>
   );

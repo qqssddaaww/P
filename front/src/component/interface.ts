@@ -1,5 +1,6 @@
 export interface Board {
-  id?: number;
+  uid?: number;
+  id: string;
   title: string;
   content: string;
   author: string;
@@ -8,7 +9,7 @@ export interface Board {
 }
 
 export interface chBoard {
-  id: number;
+  uid: number;
   title: string;
   content: string;
   date: string;
@@ -31,4 +32,22 @@ export interface Props {
 export interface param {
   page: number;
   size: number;
+}
+
+export interface login {
+  id : string,
+  pw: string
+}
+
+export interface userState {
+  user : user,
+  loading: boolean;
+  error: string | null | Error;
+}
+
+
+export interface user {
+  id : string,
+  pw?: string,
+  name : string,
 }

@@ -24,10 +24,9 @@ export const pageBoard = createAsyncThunk<Board[], param, { rejectValue: Error }
 });
 
 //   게시판 글 작성 API
-export const saveBoard = createAsyncThunk<Board, Board, { rejectValue: Error }>("board/saveBoard", async (value: Board, thunkAPI) => {
+export const saveBoard = createAsyncThunk<void, Board, { rejectValue: Error }>("board/saveBoard", async (value: Board, thunkAPI) => {
   try {
-    const res = await axios.post("http://localhost:8080/save-content", value);
-    return res.data;
+    await axios.post("http://localhost:8080/save-content", value);
   } catch (e) {
     return thunkAPI.rejectWithValue(e as Error);
   }
@@ -46,7 +45,7 @@ export const changeBoard = createAsyncThunk<Board, chBoard, { rejectValue: Error
 //   조회수 증가 API
 export const increaseHits = createAsyncThunk<Board, number | undefined, { rejectValue: Error }>("board/increaseHits", async (id: number | undefined, thunkAPI) => {
   try {
-    const res = await axios.get(`http://localhost:8080/increase-hits?id=${id}`);
+    const res = await axios.get(`http://localhost:8080/increase-hits?uid=${id}`);
     console.log("ok :" + res);
     return res.data;
   } catch (e) {

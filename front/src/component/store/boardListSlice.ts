@@ -44,7 +44,7 @@ const boardListSlice = createSlice({
       .addCase(pageBoard.pending, pending)
       .addCase(pageBoard.fulfilled, (state, action: PayloadAction<Board[]>) => {
         state.loading = false;
-        state.boards = action.payload;
+        state.boards = action.payload.filter(board => board.uid);
       })
       .addCase(pageBoard.rejected, rejected)
 
@@ -54,15 +54,14 @@ const boardListSlice = createSlice({
         state.loading = false;
         const updatedBoard = action.payload;
         // 상태 데이터에서 변경된 항목만 업데이트
-        state.boards = state.boards.map((board) => (board.id === updatedBoard.id ? updatedBoard : board));
+        state.boards = state.boards.map((board) => (board.uid === updatedBoard.uid ? updatedBoard : board));
       })
       .addCase(changeBoard.rejected, rejected)
 
       // saveBoard Thunk 처리
       .addCase(saveBoard.pending, pending)
-      .addCase(saveBoard.fulfilled, (state, action: PayloadAction<Board>) => {
+      .addCase(saveBoard.fulfilled, (state) => {
         state.loading = false;
-        state.boards.push(action.payload);
       })
       .addCase(saveBoard.rejected, rejected)
 
