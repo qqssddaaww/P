@@ -9,10 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChangeDto {
-    private Long uid;
-    private String title;
-    private String content;
-    private String date;
-
+public class LoginDto {
+    private String id;
+    private String pw;
 }

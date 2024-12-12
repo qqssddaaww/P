@@ -11,20 +11,21 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoardDto {
-	private Long id;
 	private String title;
 	private String content;
+	private String id;
 	private String author;
-	private Integer hits;
 	private String date;
+	private Integer hits;
 	
-	public Board board(String title, String content, String author,String date) {
+	public Board board(String title, String content,String id, String author,String date) {
 		return Board.builder()
-				.content(content)
 				.title(title)
+				.content(content)
+				.id(id)
 				.author(author)
-				.hits(0)
 				.date(date)
+				.hits(0)
 				.build();
 	}
 }

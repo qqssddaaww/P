@@ -3,7 +3,6 @@ package Board.back.service;
 import java.util.List;
 import java.util.Optional;
 
-import Board.back.dto.BoardDto;
 import Board.back.dto.ChangeDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,16 +26,16 @@ public class BoardServiceImpl implements BoardService{
 	public void autoClear () {
 		jdbcTemplate.execute("ALTER TABLE board AUTO_INCREMENT=1;");
 		jdbcTemplate.execute("SET @COUNT = 0;");
-		jdbcTemplate.execute("UPDATE board SET id = @COUNT:=@COUNT+1;");
+		jdbcTemplate.execute("UPDATE board SET uid = @COUNT:=@COUNT+1;");
 	}
 	@Override
 	public List<Board> getBoardList() {
-		List<Board> list = boardRepository.findAll(Sort.by(Sort.Order.desc("id")));
+		List<Board> list = boardRepository.findAll(Sort.by(Sort.Order.desc("uid")));
 		return list;
 	}
 	
-	public Optional<Board> getOne(Long id) {
-		return boardRepository.findById(id);
+	public Board getOne(Long uid) {
+		return boardRepository.findByUid(uid);
 	}
 	
 	public void save(Board board) {
@@ -44,27 +43,27 @@ public class BoardServiceImpl implements BoardService{
 		autoClear();
 	}
 	
-	public void delete(Long id) {
-		boardRepository.deleteById(id);
+	public void delete(Long uid) {
+		boardRepository.deleteById(uid);
 		autoClear();
 	}
-	public void increaseHits(Long id) {
-		Optional<Board> board = getOne(id);
-		board.get().setHits(board.get().getHits() + 1);
-		save(board.get());
+	public void increaseHits(Long uid) {
+		Board board = getOne(uid);
+		board.setHits(board.getHits() + 1);
+		save(board);
 	}
 
 	@Override
 	public Page<Board> boardPage(int page, int size) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("id")));
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("uid")));
 		Page<Board> boardPage = boardRepository.findAll(pageable);
 		return boardPage;
 	}
 
 	@Override
 	public Board change(ChangeDto changeDto) {
-		Optional<Board> board = getOne(changeDto.getId());
-		Board changeBoard = board.get();
+		Board board = getOne(changeDto.getUid());
+		Board changeBoard = board;
 		changeBoard.setDate(changeDto.getDate());
 		changeBoard.setTitle(changeDto.getTitle());
 		changeBoard.setContent(changeDto.getContent());

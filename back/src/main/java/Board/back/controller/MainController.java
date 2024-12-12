@@ -1,12 +1,19 @@
 package Board.back.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import Board.back.domain.User;
 import Board.back.dto.ChangeDto;
+import Board.back.dto.JoinDto;
+import Board.back.dto.LoginDto;
+import Board.back.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,12 +31,16 @@ import Board.back.service.BoardService;
 @RequestMapping("/")
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", allowCredentials = "true", methods = {RequestMethod.GET, RequestMethod.POST})
 public class MainController {
-	
+	private final HttpServletRequest request;
 	public final BoardService boardService;
+	public final UserService userService;
 
-	public MainController(BoardService boardService) {
+	public MainController(BoardService boardService, HttpServletRequest request, UserService userService) {
+		this.request = request;
 		this.boardService = boardService;
+		this.userService = userService;
 	}
+
 
 	@GetMapping("/get-board")
 	public ResponseEntity<List<Board>> getBoard() {
@@ -44,25 +55,24 @@ public class MainController {
 	}
 	
 	@GetMapping("/get-one")
-	public ResponseEntity<Optional<Board>> one(@RequestParam Long id) {
-		return ResponseEntity.ok(boardService.getOne(id));
+	public ResponseEntity<Board> one(Long uid) {
+		return ResponseEntity.ok(boardService.getOne(uid));
 	}
 	
 	@PostMapping("/save-content")
-	public String save(@RequestBody BoardDto boardDto) {
-		Board board = boardDto.board(boardDto.getTitle(), boardDto.getContent(), boardDto.getAuthor(),boardDto.getDate());
+	public void save(@RequestBody BoardDto boardDto) {
+		Board board = boardDto.board(boardDto.getTitle(), boardDto.getContent(),boardDto.getId(), boardDto.getAuthor(),boardDto.getDate());
 		boardService.save(board);
-		return "작성완료";
 	}
 	@PostMapping("/delete-board")
-	public String delete(Long id) {
-		boardService.delete(id);
+	public String delete(Long uid) {
+		boardService.delete(uid);
 		return "삭제 완료";
 	}
 
 	@GetMapping("/increase-hits")
-	public String increaseHits (Long id) {
-		boardService.increaseHits(id);
+	public String increaseHits (Long uid) {
+		boardService.increaseHits(uid);
 		return "ok";
 	}
 	@PostMapping("/change-board")
@@ -70,4 +80,39 @@ public class MainController {
 		Board board = boardService.change(changeDto);
 		return ResponseEntity.ok(board);
 	}
+	@PostMapping("login")
+	public ResponseEntity<Map<String, String>> login (@RequestBody LoginDto loginDto) {
+		HttpSession session = request.getSession();
+		User user = userService.login(loginDto);
+		Map<String, String> value = new HashMap<>();
+
+		if (user != null) {
+			session.setAttribute("id", user.getId());
+			session.setAttribute("name", user.getName());
+
+			value.put("id", (String)session.getAttribute("id"));
+			value.put("name", (String)session.getAttribute("name"));
+			return ResponseEntity.ok(value);
+		}
+
+		return null;
+	}
+	@GetMapping("/logout")
+	public void logout() {
+		HttpSession session = request.getSession();
+		session.removeAttribute("id");
+		session.removeAttribute("name");
+
+	}
+
+	@PostMapping("/join")
+	public ResponseEntity<User> join (@RequestBody JoinDto joinDto) {
+		User user = joinDto.user(joinDto.getId(), joinDto.getPw(), joinDto.getName());
+		User joinUser = userService.join(user);
+		if ( joinUser == null ) {
+			return null;
+		}
+		return ResponseEntity.status(200).body(user);
+	}
+
 }     

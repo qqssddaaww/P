@@ -10,10 +10,10 @@ import org.springframework.data.domain.Page;
 
 public interface BoardService {
 	List<Board> getBoardList();
-	Optional<Board> getOne(Long id);
+	Board getOne(Long uid);
 	void save(Board board);
-	void delete(Long id);
-	void increaseHits(Long id);
+	void delete(Long uid);
+	void increaseHits(Long uid);
 	Page<Board> boardPage(int page, int size);
 	Board change(ChangeDto changeDto);
 }

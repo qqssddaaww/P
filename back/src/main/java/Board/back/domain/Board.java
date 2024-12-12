@@ -27,16 +27,18 @@ public class Board {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long uid;
 	@Column(nullable = false)
 	private String title;
 	@Column(nullable = false)
 	private String content;
 	@Column(nullable = false)
+	private String id;
+	@Column(nullable = false)
 	private String author;
 	@Column
-    private Integer hits;
-	@Column
 	private String date;
+	@Column
+	private Integer hits;
 
 }

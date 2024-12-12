@@ -10,5 +10,5 @@ import Board.back.domain.Board;
 
 public interface BoardRepository extends JpaRepository<Board, Long>{
 	Optional<Board> findById(Long id);
-
+	Board findByUid(Long uid);
 }
