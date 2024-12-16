@@ -3,7 +3,6 @@ package Board.back.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import Board.back.domain.User;
 import Board.back.dto.ChangeDto;
@@ -13,15 +12,9 @@ import Board.back.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import Board.back.domain.Board;
 import Board.back.dto.BoardDto;
@@ -31,12 +24,10 @@ import Board.back.service.BoardService;
 @RequestMapping("/")
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", allowCredentials = "true", methods = {RequestMethod.GET, RequestMethod.POST})
 public class MainController {
-	private final HttpServletRequest request;
 	public final BoardService boardService;
 	public final UserService userService;
 
-	public MainController(BoardService boardService, HttpServletRequest request, UserService userService) {
-		this.request = request;
+	public MainController(BoardService boardService,  UserService userService) {
 		this.boardService = boardService;
 		this.userService = userService;
 	}
@@ -81,8 +72,8 @@ public class MainController {
 		return ResponseEntity.ok(board);
 	}
 	@PostMapping("login")
-	public ResponseEntity<Map<String, String>> login (@RequestBody LoginDto loginDto) {
-		HttpSession session = request.getSession();
+	public ResponseEntity<Map<String, String>> login (@RequestBody LoginDto loginDto, HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
 		User user = userService.login(loginDto);
 		Map<String, String> value = new HashMap<>();
 
@@ -94,15 +85,13 @@ public class MainController {
 			value.put("name", (String)session.getAttribute("name"));
 			return ResponseEntity.ok(value);
 		}
-
 		return null;
 	}
 	@GetMapping("/logout")
-	public void logout() {
+	public void logout(HttpServletRequest request) {
 		HttpSession session = request.getSession();
 		session.removeAttribute("id");
 		session.removeAttribute("name");
-
 	}
 
 	@PostMapping("/join")
@@ -115,4 +104,15 @@ public class MainController {
 		return ResponseEntity.status(200).body(user);
 	}
 
+	@GetMapping("/check-session")
+	public ResponseEntity<Map<String, String>> checkSession(@SessionAttribute(name = "id", required = false) String id,
+															@SessionAttribute(name = "name", required = false) String name) {
+		Map <String, String> value = new HashMap<>();
+		if (id != null && name != null) {
+			value.put("id",id);
+			value.put("name", name);
+			return ResponseEntity.ok(value);
+		}
+			return null;
+	}
 }     
