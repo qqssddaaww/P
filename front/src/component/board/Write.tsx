@@ -15,7 +15,7 @@ const formatDate: string = `${year}-${month}-${day}`;
 // date: new Date().toISOString().split('T')[0],
 const modules = {
   toolbar: {
-    container: [[{ header: [1, 2, 3, 4, 5, false] }], ["bold", "underline", "strike"], ["blockquote", "code-block"],  ["clean"]],
+    container: [[{ header: [1, 2, 3, 4, 5, false] }], ["bold", "underline", "strike"], ["blockquote", "code-block"], ["clean"]],
   },
 };
 

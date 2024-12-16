@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import "./css/list.scss";
 import Pagination from "./Pagination";
 import { axiosBoard, increaseHits, pageBoard } from "../store/AsyncThunk";
-import { logoutUser } from "../store/userSlice";
 import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
@@ -21,23 +20,10 @@ export default function List() {
   function handleHits(uid: number | undefined) {
     dispatch(increaseHits(uid)); //
   }
-  const handlelogout = () => {
-    dispatch(logoutUser());
-  }
+
   return (
     <div className="list-main-div">
-      <div className="list-header-div">
-        <h2>게시판</h2>
-        <div>
-          {user.id === "" ? (
-            <Link to={"/login"} style={{ textDecoration: "none" }}>
-              <button className="list-login-button">로그인</button>
-            </Link>
-          ) : (
-            <button className="list-login-button" onClick={handlelogout}>{user.name}</button>
-          )}
-        </div>
-      </div>
+      
 
       {user.id !== "" ? (
         <div className="list-link-div">
