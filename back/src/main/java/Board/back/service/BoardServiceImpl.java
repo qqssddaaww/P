@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import Board.back.dto.ChangeDto;
+import Board.back.exception.BoardNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,11 +32,18 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public List<Board> getBoardList() {
 		List<Board> list = boardRepository.findAll(Sort.by(Sort.Order.desc("uid")));
+		if (list == null) {
+			throw new BoardNotFoundException("Board not found");
+		}
 		return list;
 	}
 	
 	public Board getOne(Long uid) {
-		return boardRepository.findByUid(uid);
+		Board board = boardRepository.findByUid(uid);
+		if (board == null) {
+			throw new BoardNotFoundException("Board not found with id : " + uid);
+		}
+		return board;
 	}
 	
 	public void save(Board board) {
@@ -49,6 +57,9 @@ public class BoardServiceImpl implements BoardService{
 	}
 	public void increaseHits(Long uid) {
 		Board board = getOne(uid);
+		if (board == null) {
+			throw new BoardNotFoundException("Board not found with id : " + uid);
+		}
 		board.setHits(board.getHits() + 1);
 		save(board);
 	}
@@ -57,12 +68,18 @@ public class BoardServiceImpl implements BoardService{
 	public Page<Board> boardPage(int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.desc("uid")));
 		Page<Board> boardPage = boardRepository.findAll(pageable);
+		if (boardPage == null) {
+			throw new BoardNotFoundException("Board not found");
+		}
 		return boardPage;
 	}
 
 	@Override
 	public Board change(ChangeDto changeDto) {
 		Board board = getOne(changeDto.getUid());
+		if (board == null) {
+			throw new BoardNotFoundException("Board not found with id : " + changeDto.getUid());
+		}
 		Board changeBoard = board;
 		changeBoard.setDate(changeDto.getDate());
 		changeBoard.setTitle(changeDto.getTitle());

@@ -56,15 +56,15 @@ public class MainController {
 		boardService.save(board);
 	}
 	@PostMapping("/delete-board")
-	public String delete(Long uid) {
+	public ResponseEntity<String> delete(Long uid) {
 		boardService.delete(uid);
-		return "삭제 완료";
+		return ResponseEntity.status(200).body("삭제 완료");
 	}
 
 	@GetMapping("/increase-hits")
-	public String increaseHits (Long uid) {
+	public ResponseEntity<String>  increaseHits (Long uid) {
 		boardService.increaseHits(uid);
-		return "ok";
+		return ResponseEntity.ok("삭제 완료");
 	}
 	@PostMapping("/change-board")
 	public ResponseEntity<Board> changeBoard(@RequestBody ChangeDto changeDto) {
