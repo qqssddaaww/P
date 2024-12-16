@@ -1,23 +1,17 @@
 import { useEffect } from "react";
-import { Link, useSearchParams } from "react-router";
+import { Link } from "react-router";
 import "./css/list.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store/store";
 import Pagination from "./Pagination";
 import { axiosBoard, increaseHits, pageBoard } from "../store/AsyncThunk";
 import { logoutUser } from "../store/userSlice";
+import useAppSelector from "../hooks/useAppSelector";
+import useRoute from "../hooks/useRoute";
 
 export default function List() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { boards } = useSelector((state: RootState) => state.boards);
-  const size = useSelector((state: RootState) => state.boards.size);
-  const { user } = useSelector((state: RootState) => state.user);
-  const [searchParams] = useSearchParams();
-  const page = searchParams.get("page");
-  const param = {
-    page: page ? Number(page) : 1,
-    size: 15,
-  };
+    // 커스텀 훅 만들어서 사용
+  const { dispatch, boards, size, user } = useAppSelector();
+  const { page, param } = useRoute();
+
   useEffect(() => {
     dispatch(axiosBoard());
     dispatch(pageBoard(param));
@@ -45,7 +39,7 @@ export default function List() {
         </div>
       </div>
 
-      {true ? (
+      {user.id !== "" ? (
         <div className="list-link-div">
           <Link to={"/write"} style={{ textDecoration: "none" }} className="list-link-style">
             <button className="list-link-button">작성</button>

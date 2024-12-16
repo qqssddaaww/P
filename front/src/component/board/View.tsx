@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Board } from "../interface";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/store";
+import useAppSelector from "../hooks/useAppSelector";
+import useRoute from "../hooks/useRoute";
 
 export default function View() {
-  const { uid } = useParams();
-  const navigate = useNavigate();
-  const { user } = useSelector((state: RootState) => state.user);
+  // 커스텀 훅 만들어서 사용
+  const { user } = useAppSelector();
+  const { uid, navigate } = useRoute();
+  
   const [board, setBoard] = useState<Board>({
     id: "",
     title: "",
@@ -33,7 +33,7 @@ export default function View() {
 
   const handleDelete = async () => {
     try {
-      const deleteBoard = await axios.post(`http://localhost:8080/delete-board?uid=${uid}`);
+      await axios.post(`http://localhost:8080/delete-board?uid=${uid}`);
       navigate("/");
     } catch (e) {
       console.log(e);
@@ -41,7 +41,7 @@ export default function View() {
   };
 
   const handleChange = () => {
-    navigate(`/write`, { state: { title: board.title, content: board.content, uid: uid } });
+    navigate(`/write`, { state: { title: board.title, content: board.content, uid: uid, id: board.id } });
   };
   return (
     <>
@@ -60,7 +60,7 @@ export default function View() {
           }}
           className="view-content-div"
         ></div>
-        {true ? (
+        {user?.id === board.id ? (
           <div className="view-2button-div">
             <div className="view-change-delete-div">
               <button className="view-change-button" onClick={handleChange}>

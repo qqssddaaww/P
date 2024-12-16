@@ -4,8 +4,8 @@ import axios from "axios";
 
 export const loginUser = createAsyncThunk<user, login, { rejectValue: Error }>("user/loginUser", async (value: login, thunkAPI) => {
   try {
-    const res = await axios.post("http://localhost:8080/login", value);
-    console.dir(res)
+    const res = await axios.post("http://localhost:8080/login", value, { withCredentials: true});
+    console.dir(res);
     return res.data;
   } catch (e) {
     return thunkAPI.rejectWithValue(e as Error);
@@ -13,22 +13,35 @@ export const loginUser = createAsyncThunk<user, login, { rejectValue: Error }>("
 });
 
 export const joinUser = createAsyncThunk<user, user, { rejectValue: Error }>("user/joinUser", async (value: user, thunkAPI) => {
-    try {
-      const res = await axios.post("http://localhost:8080/join", value);
-      return res.data;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e as Error);
-    }
-  });
+  try {
+    const res = await axios.post("http://localhost:8080/join", value);
+    return res.data;
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e as Error);
+  }
+});
 
-  export const logoutUser = createAsyncThunk<void, void, { rejectValue: Error }>("user/logoutUser", async (_, thunkAPI) => {
-    try {
-      await axios.get("http://localhost:8080/logout");
-      return ;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e as Error);
+export const logoutUser = createAsyncThunk<void, void, { rejectValue: Error }>("user/logoutUser", async (_, thunkAPI) => {
+  try {
+    await axios.get("http://localhost:8080/logout", { withCredentials: true });
+    return;
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e as Error);
+  }
+});
+
+export const checkSession = createAsyncThunk<user, void, { rejectValue: Error }>("user/checkSession", async (_, thunkAPI) => {
+  try {
+    const res = await axios.get("http://localhost:8080/check-session", { withCredentials: true });
+    console.dir(res.data)
+    if (res.data === "") {
+      return { id : "", name : ""}
     }
-  });
+    return res.data;
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e as Error);
+  }
+});
 
 const initialState: userState = {
   user: {
@@ -56,7 +69,12 @@ const rejected = (state: userState, action: PayloadAction<Error | undefined>) =>
 const userSilce = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      state.user.id = action.payload.id;
+      state.user.name = action.payload.name;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, pending)
@@ -78,8 +96,17 @@ const userSilce = createSlice({
         state.user.name = "";
         state.loading = false;
       })
-      .addCase(logoutUser.rejected, rejected);
+      .addCase(logoutUser.rejected, rejected)
+
+      .addCase(checkSession.pending, pending) 
+      .addCase(checkSession.fulfilled, (state, action: PayloadAction<user>) => {
+        console.log(action.payload);
+        state.user = action.payload;
+        state.loading = false;
+      })
+      .addCase(checkSession.rejected, rejected);
   },
 });
 
+export const { setUser } = userSilce.actions;
 export default userSilce.reducer;

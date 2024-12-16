@@ -1,22 +1,17 @@
 import "./css/list.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { login } from "../interface";
-import { useDispatch } from "react-redux";
 import { loginUser } from "../store/userSlice";
-import { AppDispatch } from "../store/store";
-import { useNavigate } from "react-router";
+import useAppSelector from "../hooks/useAppSelector";
+import useRoute from "../hooks/useRoute";
 
 export default function Login() {
   const [login, setLogin] = useState<login>({
     id: "",
     pw: "",
   });
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("id : " + login.id + ", pw : " + login.pw);
-  }, [login]);
+  const { dispatch } = useAppSelector();
+  const { navigate } = useRoute();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;

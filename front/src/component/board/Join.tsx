@@ -1,9 +1,8 @@
 import {  useState } from "react";
 import { user } from "../interface";
-import { AppDispatch } from "../store/store";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
 import { joinUser } from "../store/userSlice";
+import useAppSelector from "../hooks/useAppSelector";
+import useRoute from "../hooks/useRoute";
 
 export default function Join() {
   const [join, setJoin] = useState<user>({
@@ -11,8 +10,8 @@ export default function Join() {
     pw: "",
     name: "",
   });
-  const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
+  const { dispatch } = useAppSelector();
+  const { navigate } = useRoute();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
