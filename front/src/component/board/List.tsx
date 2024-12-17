@@ -24,7 +24,7 @@ export default function List() {
     }
   }
 
-  if (sessionErr) return <>오류류 !</>
+  if (sessionErr || boardsErr || paginationErr) return <>오류류 !</>
   if (sessionLoading) return <>로딩중</>
 
   return (
