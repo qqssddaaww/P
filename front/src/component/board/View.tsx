@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Board } from "../interface";
-import axios from "axios";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
 import useRoute from "../hooks/useRoute";
 import useSWR from "swr";
+import axiosInstance from '../../utils/axiosInstance';
 
 export default function View() {
   // 커스텀 훅 만들어서 사용
@@ -23,7 +23,7 @@ export default function View() {
   useEffect(() => {
     const board = async () => {
       try {
-        const res = await axios.get(`http://localhost:8080/get-one?uid=${uid}`);
+        const res = await axiosInstance.get(`http://localhost:8080/get-one?uid=${uid}`);
         setBoard(res.data);
       } catch (e) {
         console.log(e);
@@ -34,7 +34,7 @@ export default function View() {
 
   const handleDelete = async () => {
     try {
-      await axios.post(`http://localhost:8080/delete-board?uid=${uid}`);
+      await axiosInstance.post(`http://localhost:8080/delete-board?uid=${uid}`);
       navigate("/");
     } catch (e) {
       console.log(e);

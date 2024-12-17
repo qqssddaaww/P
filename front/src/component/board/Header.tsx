@@ -1,10 +1,9 @@
 import { Link } from "react-router";
-
 import "./css/list.scss";
 import useRoute from "../hooks/useRoute";
 import useSWR, { mutate } from "swr";
 import { user } from "../interface";
-import axios from "axios";
+import axiosInstance from '../../utils/axiosInstance';
 
 export default function Header() {
   // USER 정보 API
@@ -12,7 +11,7 @@ export default function Header() {
   const { data: session, error: sessionErr } = useSWR<user>("http://localhost:8080/check-session")
   const handlelogout = async () => {
     // 로그아웃 API
-    await axios.get("http://localhost:8080/logout",  {withCredentials: true})
+    await axiosInstance.get("http://localhost:8080/logout")
     mutate("http://localhost:8080/check-session")
     navigate("/");
   };

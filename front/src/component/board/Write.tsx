@@ -5,7 +5,7 @@ import "./css/ql.scss";
 import { Board, chBoard } from "../interface";
 import useRoute from "../hooks/useRoute";
 import useSWR, { mutate } from "swr";
-import axios from "axios";
+import axiosInstance from '../../utils/axiosInstance';
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
@@ -47,7 +47,7 @@ export default function Write() {
 
   const axiosPost = async(url:string, data: Board | chBoard) => {
     try {
-      const response = await axios.post(url, data);
+      const response = await axiosInstance.post(url, data);
       return response.data;
     } catch (e) {
       console.log(e);
