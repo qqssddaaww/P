@@ -64,16 +64,16 @@ public class MainController {
 	@GetMapping("/increase-hits")
 	public ResponseEntity<String>  increaseHits (Long uid) {
 		boardService.increaseHits(uid);
-		return ResponseEntity.ok("삭제 완료");
+		return ResponseEntity.ok("");
 	}
 	@PostMapping("/change-board")
 	public ResponseEntity<Board> changeBoard(@RequestBody ChangeDto changeDto) {
 		Board board = boardService.change(changeDto);
 		return ResponseEntity.ok(board);
 	}
-	@PostMapping("login")
+	@PostMapping("/login")
 	public ResponseEntity<Map<String, String>> login (@RequestBody LoginDto loginDto, HttpServletRequest request) {
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession();
 		User user = userService.login(loginDto);
 		Map<String, String> value = new HashMap<>();
 

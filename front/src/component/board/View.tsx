@@ -4,10 +4,11 @@ import axios from "axios";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
 import useRoute from "../hooks/useRoute";
+import useSWR from "swr";
 
 export default function View() {
   // 커스텀 훅 만들어서 사용
-
+  const { data: session } = useSWR("http://localhost:8080/check-session")
   // user 가져오는 API
   const { uid, navigate } = useRoute();
 
@@ -60,7 +61,7 @@ export default function View() {
           }}
           className="view-content-div"
         ></div>
-        {user?.id === board.id ? (
+        {session?.id === board.id ? (
           <div className="view-2button-div">
             <div className="view-change-delete-div">
               <button className="view-change-button" onClick={handleChange}>

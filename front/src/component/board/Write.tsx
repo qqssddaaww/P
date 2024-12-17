@@ -4,6 +4,7 @@ import "./css/list.scss";
 import "./css/ql.scss";
 import { Board, chBoard } from "../interface";
 import useRoute from "../hooks/useRoute";
+import useSWR from "swr";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
@@ -18,17 +19,20 @@ const modules = {
 };
 
 export default function Write() {
+
   // 커스텀 훅 만들어서 사용
   const { state, navigate } = useRoute();
   // user 정보 가져오는  API
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
+  const { data: session } = useSWR("http://localhost:8080/check-session")
+
   const value: Board = {
-    id: user.id,
+    id: session.id,
     title: title,
     content: content,
-    author: user.name,
+    author: session.name,
     date: formatDate,
     hits: 0,
   };
@@ -75,8 +79,8 @@ export default function Write() {
         <ReactQuill className="write-react-quill" modules={modules} onChange={setContent} value={content} />
       </div>
       <div className="write-button-div">
-        <button className="write-button-send" name={user.id === state?.id ? "change" : "save"} onClick={handleSend}>
-          {user.id === state?.id ? "수정" : "작성"}
+        <button className="write-button-send" name={session.id === state?.id ? "change" : "save"} onClick={handleSend}>
+          {session.id === state?.id ? "수정" : "작성"}
         </button>
       </div>
     </div>

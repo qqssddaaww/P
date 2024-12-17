@@ -2,19 +2,32 @@ import "./css/list.scss";
 import { useState } from "react";
 import { login } from "../interface";
 import useRoute from "../hooks/useRoute";
+import axios from "axios";
+import { mutate } from "swr";
 
 export default function Login() {
   const [login, setLogin] = useState<login>({
     id: "",
     pw: "",
   });
-
   const { navigate } = useRoute();
+  
+  const loginAxios = async () => {
+    try {
+      const res = await axios.post("http://localhost:8080/login", login , {withCredentials: true});
+      mutate("http://localhost:8080/check-session")
+      console.log(res.data)
+      navigate("/")
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     if (name === "id") {
-      setLogin({...login, id: e.target.value});
+      setLogin({...login, id: e.target.value})
     } else {
       setLogin({...login, pw: e.target.value})
     }
@@ -22,7 +35,7 @@ export default function Login() {
 
     const handleClick = () => {
 //  로그인되는 API
-      navigate("/")
+      loginAxios();
     };
 
     const handleJoin = () => {

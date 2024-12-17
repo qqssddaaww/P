@@ -19,7 +19,6 @@ export interface BoardState {
   boards: Board[];
   loading: boolean;
   error: string | null | Error;
-  size: number;
 }
 
 export interface Props {

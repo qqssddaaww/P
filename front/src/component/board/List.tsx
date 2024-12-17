@@ -1,29 +1,36 @@
-import { useEffect } from "react";
 import { Link } from "react-router";
 import "./css/list.scss";
 import Pagination from "./Pagination";
 import useRoute from "../hooks/useRoute";
+import useSWR, { mutate } from "swr";
+import { Board, BoardState, user } from "../interface";
+import axios from "axios";
 
 export default function List() {
-    // 커스텀 훅 만들어서 사용
-    // user, boards, size 가져오는 api
   const { page, param } = useRoute();
+  // 커스텀 훅 만들어서 사용
+  // user, boards, size 가져오는 api
+  const { data: session, error: sessionErr, isLoading: sessionLoading } = useSWR<user>("http://localhost:8080/check-session")
+  const { data: boards, error: boardsErr } = useSWR("http://localhost:8080/get-board");
+  const { data: pagination, error: paginationErr } = useSWR<BoardState>(`http://localhost:8080/page-board?page=${param.page-1}&size=${param.size}`)
+  const size = boards?.length;
 
-  useEffect(() => {
-    // 보드 전부 가져오는거랑 페이지네이션 보드 API
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
-
-  function handleHits(uid: number | undefined) {
-    // 조회수 올라가는 API
+  const  handleHits = async (uid: number | undefined) => {
+    try{
+      await axios.get(`http://localhost:8080/increase-hits?uid=${uid}`)
+      mutate(`http://localhost:8080/page-board?page=${param.page - 1}&size=${param.size}`);
+    } catch(e) {
+      console.log(e);
+    }
   }
 
-  return (
-    <div className="list-main-div">
-      
+  if (sessionErr) return <>오류류 !</>
+  if (sessionLoading) return <>로딩중</>
 
-      {user.id !== "" ? (
+  return (
+    
+    <div className="list-main-div">
+      {( session && session?.id !== "") ? (
         <div className="list-link-div">
           <Link to={"/write"} style={{ textDecoration: "none" }} className="list-link-style">
             <button className="list-link-button">작성</button>
@@ -42,7 +49,7 @@ export default function List() {
           <p>조회수</p>
         </div>
         <div className="list-div">
-          {boards.map((data) => (
+          {pagination ? pagination?.map((data: Board) => (
             <div className="list-content-div" key={data.uid}>
               <Link to={`/view/${data.uid}`} style={{ textDecoration: "none" }} className="list-content-link" onClick={() => handleHits(data.uid)}>
                 <p>{data.uid}</p>
@@ -52,7 +59,7 @@ export default function List() {
                 <p>{data.hits}</p>
               </Link>
             </div>
-          ))}
+          )) : <div>글이 없습니다.</div> }
         </div>
       </div>
       <Pagination totalItems={size} currentPage={page && parseInt(page) > 0 ? parseInt(page) : 1} pageCount={5} itemCountPerPage={15} />
