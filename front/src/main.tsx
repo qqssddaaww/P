@@ -1,13 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import { Provider } from "react-redux";
-import store from "./component/store/store.ts";
+import { SWRConfig } from "swr";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Provider store={store}>
+    <SWRConfig>
       <App />
-    </Provider>
+    </SWRConfig>
   </StrictMode>
 );
