@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { Link } from "react-router";
 import "./css/list.scss";
 import Pagination from "./Pagination";
-import { axiosBoard, increaseHits, pageBoard } from "../store/AsyncThunk";
 import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 

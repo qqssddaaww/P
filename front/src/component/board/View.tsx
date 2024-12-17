@@ -14,6 +14,10 @@ export default function View() {
   const [board, setBoard] = useState<Board>({
     id: "",
     title: "",
+
+
+
+    
     content: "",
     author: "",
     hits: 0,

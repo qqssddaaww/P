@@ -1,7 +1,6 @@
 import "./css/list.scss";
 import { useState } from "react";
 import { login } from "../interface";
-import { loginUser } from "../store/userSlice";
 import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 

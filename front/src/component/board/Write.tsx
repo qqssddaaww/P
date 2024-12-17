@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "./css/list.scss";
 import "./css/ql.scss";
-import { Board, chBoard } from "../interface";
-import { changeBoard, saveBoard } from "../store/AsyncThunk";
-import useAppSelector from "../hooks/useAppSelector";
+import { Board, chBoard } from "../interface";import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
 const date: Date = new Date();

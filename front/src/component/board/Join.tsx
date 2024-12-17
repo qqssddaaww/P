@@ -1,6 +1,5 @@
 import {  useState } from "react";
 import { user } from "../interface";
-import { joinUser } from "../store/userSlice";
 import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
