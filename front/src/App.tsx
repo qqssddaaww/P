@@ -28,7 +28,7 @@ export default function App() {
         { path: "write", element: <Write /> },
         { path: "view/:uid", element: <View /> },
         { path: "login", element: <Login /> },
-        { path: "/join", element: <Join />},
+        { path: "join", element: <Join />},
       ]
     }
   ])

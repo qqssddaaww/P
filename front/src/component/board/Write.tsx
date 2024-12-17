@@ -78,15 +78,9 @@ export default function Write() {
         <ReactQuill className="write-react-quill" modules={modules} onChange={setContent} value={content} />
       </div>
       <div className="write-button-div">
-        {user.id === state?.id ? (
-          <button className="write-button-send" name="change" onClick={handleSend}>
-            수정
-          </button>
-        ) : (
-          <button className="write-button-send" name="save" onClick={handleSend}>
-            작성
-          </button>
-        )}
+        <button className="write-button-send" name={user.id === state?.id ? "change" : "save"} onClick={handleSend}>
+          {user.id === state?.id ? "수정" : "작성"}
+        </button>
       </div>
     </div>
   );

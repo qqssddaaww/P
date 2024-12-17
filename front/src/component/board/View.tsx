@@ -10,7 +10,7 @@ export default function View() {
   // 커스텀 훅 만들어서 사용
   const { user } = useAppSelector();
   const { uid, navigate } = useRoute();
-  
+
   const [board, setBoard] = useState<Board>({
     id: "",
     title: "",
