@@ -4,7 +4,8 @@ import "./css/list.scss";
 import "./css/ql.scss";
 import { Board, chBoard } from "../interface";
 import useRoute from "../hooks/useRoute";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
+import axios from "axios";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
@@ -44,6 +45,15 @@ export default function Write() {
     date: formatDate,
   };
 
+  const axiosPost = async(url:string, data: Board | chBoard) => {
+    try {
+      const response = await axios.post(url, data);
+      return response.data;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   useEffect(() => {
     if (state) {
       setContent(state.content);
@@ -63,9 +73,12 @@ export default function Write() {
       } else {
         if (e.currentTarget.name === "save") {
             // 게시판 저장 API
+            axiosPost("http://localhost:8080/save-content", value)
         } else if (e.currentTarget.name === "change") {
           // 게시판 수정 API
+          axiosPost("http://localhost:8080/change-board", valueCh)
         }
+        mutate("http://localhost:8080/get-board");
         navigate("/", { replace: true });
       }
     } catch (e) {
