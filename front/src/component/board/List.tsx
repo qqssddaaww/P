@@ -4,7 +4,7 @@ import Pagination from "./Pagination";
 import useRoute from "../hooks/useRoute";
 import useSWR, { mutate } from "swr";
 import { Board, BoardState, user } from "../interface";
-import axios from "axios";
+import axiosInstance from '../../utils/axiosInstance';
 
 export default function List() {
   const { page, param } = useRoute();
@@ -17,7 +17,7 @@ export default function List() {
 
   const  handleHits = async (uid: number | undefined) => {
     try{
-      await axios.get(`http://localhost:8080/increase-hits?uid=${uid}`)
+      await axiosInstance.get(`http://localhost:8080/increase-hits?uid=${uid}`)
       mutate(`http://localhost:8080/page-board?page=${param.page - 1}&size=${param.size}`);
     } catch(e) {
       console.log(e);

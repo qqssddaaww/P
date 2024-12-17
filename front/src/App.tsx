@@ -5,11 +5,11 @@ import Write from "./component/board/Write";
 import Login from "./component/board/Login";
 import Layout from "./component/board/Layout";
 import Join from "./component/board/Join";
-import axios from "axios";
 import { SWRConfig } from "swr";
+import axiosInstance from './utils/axiosInstance';
 
 export default function App() {
-  const fetcher = (url: string) => axios.get(url, {withCredentials: true}).then((res) => res.data);
+  const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
   const router = createBrowserRouter([
     {
