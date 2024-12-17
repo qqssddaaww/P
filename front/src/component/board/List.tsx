@@ -5,6 +5,7 @@ import Pagination from "./Pagination";
 import { axiosBoard, increaseHits, pageBoard } from "../store/AsyncThunk";
 import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
+import { Board } from "../interface";
 
 export default function List() {
     // 커스텀 훅 만들어서 사용
@@ -44,7 +45,7 @@ export default function List() {
           <p>조회수</p>
         </div>
         <div className="list-div">
-          {boards.map((data) => (
+          {boards.map((data: Board) => (
             <div className="list-content-div" key={data.uid}>
               <Link to={`/view/${data.uid}`} style={{ textDecoration: "none" }} className="list-content-link" onClick={() => handleHits(data.uid)}>
                 <p>{data.uid}</p>

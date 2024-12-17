@@ -5,14 +5,12 @@ import Write from "./component/board/Write";
 import Login from "./component/board/Login";
 import Layout from "./component/board/Layout";
 import Join from "./component/board/Join";
-import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkSession } from "./component/store/userSlice";
-import { AppDispatch, RootState } from "./component/store/store";
+import useAppSelector from "./component/hooks/useAppSelector";
 
 export default function App() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { dispatch, user } = useAppSelector();
 
   useEffect(() => {
     dispatch(checkSession());
