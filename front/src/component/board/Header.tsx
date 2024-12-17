@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-
 import "./css/list.scss";
 import useAppSelector from "../hooks/useAppSelector";
 import { logoutUser } from "../store/userSlice";
