@@ -1,15 +1,14 @@
 import { Link } from "react-router";
 
 import "./css/list.scss";
-import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
 export default function Header() {
-  const { user, dispatch } = useAppSelector();
+  // USER 정보 API
   const { navigate } = useRoute();
 
   const handlelogout = () => {
-    dispatch(logoutUser());
+    // 로그아웃 API
     navigate("/");
   };
   return (

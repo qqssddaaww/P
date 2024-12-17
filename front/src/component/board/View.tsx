@@ -3,21 +3,17 @@ import { Board } from "../interface";
 import axios from "axios";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
-import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
 export default function View() {
   // 커스텀 훅 만들어서 사용
-  const { user } = useAppSelector();
+
+  // user 가져오는 API
   const { uid, navigate } = useRoute();
 
   const [board, setBoard] = useState<Board>({
     id: "",
-    title: "",
-
-
-
-    
+    title: "",    
     content: "",
     author: "",
     hits: 0,

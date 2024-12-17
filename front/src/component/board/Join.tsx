@@ -1,6 +1,5 @@
 import {  useState } from "react";
 import { user } from "../interface";
-import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
 export default function Join() {
@@ -9,7 +8,6 @@ export default function Join() {
     pw: "",
     name: "",
   });
-  const { dispatch } = useAppSelector();
   const { navigate } = useRoute();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +22,7 @@ export default function Join() {
   };
 
   const handleClick = () => {
-    dispatch(joinUser(join));
+    // JOIN 되는 API
     navigate("/login");
     alert("회원가입 성공")
   };

@@ -2,22 +2,21 @@ import { useEffect } from "react";
 import { Link } from "react-router";
 import "./css/list.scss";
 import Pagination from "./Pagination";
-import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
 export default function List() {
     // 커스텀 훅 만들어서 사용
-  const { dispatch, boards, size, user } = useAppSelector();
+    // user, boards, size 가져오는 api
   const { page, param } = useRoute();
 
   useEffect(() => {
-    dispatch(axiosBoard());
-    dispatch(pageBoard(param));
+    // 보드 전부 가져오는거랑 페이지네이션 보드 API
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, page]);
+  }, [page]);
 
   function handleHits(uid: number | undefined) {
-    dispatch(increaseHits(uid)); //
+    // 조회수 올라가는 API
   }
 
   return (

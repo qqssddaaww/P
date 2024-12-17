@@ -5,10 +5,19 @@ import Write from "./component/board/Write";
 import Login from "./component/board/Login";
 import Layout from "./component/board/Layout";
 import Join from "./component/board/Join";
+import useSWR from "swr";
+import axios from "axios";
+import { useEffect } from "react";
 
 
 export default function App() {
 
+  const fetcher = (url: string) => axios.get(url).then(res => res.data);
+  const { data } = useSWR("/check-session", fetcher)
+
+  useEffect(() => {
+    
+  },[data])
 
   const router = createBrowserRouter([
     {

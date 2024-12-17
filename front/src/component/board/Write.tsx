@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "./css/list.scss";
 import "./css/ql.scss";
-import { Board, chBoard } from "../interface";import useAppSelector from "../hooks/useAppSelector";
+import { Board, chBoard } from "../interface";
 import useRoute from "../hooks/useRoute";
 
 const date: Date = new Date();
@@ -19,9 +19,8 @@ const modules = {
 
 export default function Write() {
   // 커스텀 훅 만들어서 사용
-  const { dispatch, user } = useAppSelector();
   const { state, navigate } = useRoute();
-
+  // user 정보 가져오는  API
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
@@ -59,9 +58,9 @@ export default function Write() {
         return;
       } else {
         if (e.currentTarget.name === "save") {
-          dispatch(saveBoard(value)).unwrap();
+            // 게시판 저장 API
         } else if (e.currentTarget.name === "change") {
-          dispatch(changeBoard(valueCh)).unwrap();
+          // 게시판 수정 API
         }
         navigate("/", { replace: true });
       }

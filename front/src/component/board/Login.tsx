@@ -1,7 +1,6 @@
 import "./css/list.scss";
 import { useState } from "react";
 import { login } from "../interface";
-import useAppSelector from "../hooks/useAppSelector";
 import useRoute from "../hooks/useRoute";
 
 export default function Login() {
@@ -9,7 +8,7 @@ export default function Login() {
     id: "",
     pw: "",
   });
-  const { dispatch } = useAppSelector();
+
   const { navigate } = useRoute();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,7 +21,7 @@ export default function Login() {
   }
 
     const handleClick = () => {
-      dispatch(loginUser(login))
+//  로그인되는 API
       navigate("/")
     };
 
