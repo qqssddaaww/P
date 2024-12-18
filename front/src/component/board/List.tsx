@@ -2,18 +2,27 @@ import { Link } from "react-router";
 import "./css/list.scss";
 import Pagination from "./Pagination";
 import useRoute from "../hooks/useRoute";
-import useSWR, { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import { Board, BoardState, user } from "../interface";
 import axiosInstance from '../../utils/axiosInstance';
+import { useEffect } from "react";
+import useFetch from "../hooks/useFetch";
 
 export default function List() {
   const { page, param } = useRoute();
   // 커스텀 훅 만들어서 사용
   // user, boards, size 가져오는 api
-  const { data: session, error: sessionErr, isLoading: sessionLoading } = useSWR<user>("http://localhost:8080/check-session")
-  const { data: boards, error: boardsErr } = useSWR("http://localhost:8080/get-board");
-  const { data: pagination, error: paginationErr } = useSWR<BoardState>(`http://localhost:8080/page-board?page=${param.page-1}&size=${param.size}`)
-  const size = boards?.length;
+  // const { data: session, error: sessionErr, isLoading: sessionLoading } = useSWR<user>("http://localhost:8080/check-session")
+  // const { data: boards, error: boardsErr } = useSWR("http://localhost:8080/get-board");
+  // const { data: pagination, error: paginationErr } = useSWR<BoardState>(`http://localhost:8080/page-board?page=${param.page-1}&size=${param.size}`)
+  
+  
+  const { data: session, error: sessionErr, isLoading: sessionLoading } = useFetch<user>("http://localhost:8080/check-session");
+  const { data: boards, error: boardsErr } = useFetch<Board[]>("http://localhost:8080/get-board");
+  const { data: pagination, error: paginationErr } = useFetch<BoardState>(`http://localhost:8080/page-board?page=${param.page-1}&size=${param.size}`)
+  const { mutate } = useSWRConfig();
+
+  const size = boards?.length; 
 
   const  handleHits = async (uid: number | undefined) => {
     try{
@@ -24,11 +33,14 @@ export default function List() {
     }
   }
 
+  useEffect(() => {
+    console.log(session)
+  },[session])
+
   if (sessionErr || boardsErr || paginationErr) return <>오류류 !</>
   if (sessionLoading) return <>로딩중</>
 
   return (
-    
     <div className="list-main-div">
       {( session && session?.id !== "") ? (
         <div className="list-link-div">
@@ -39,6 +51,8 @@ export default function List() {
       ) : (
         <div className="list-link-div">로그인을 해주세요</div>
       )}
+
+    
 
       <div>
         <div className="list-title-div">

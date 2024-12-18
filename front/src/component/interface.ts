@@ -1,9 +1,9 @@
 export interface Board {
   uid?: number;
-  id: string;
+  id: string | undefined;
   title: string;
   content: string;
-  author: string;
+  author: string | undefined;
   hits: number;
   date?: string;
 }
@@ -46,7 +46,7 @@ export interface userState {
 
 
 export interface user {
-  id : string,
+  id : string | undefined,
   pw?: string,
-  name : string,
+  name : string | undefined,
 }

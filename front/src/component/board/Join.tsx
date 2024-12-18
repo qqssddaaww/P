@@ -1,6 +1,7 @@
 import {  useState } from "react";
 import { user } from "../interface";
 import useRoute from "../hooks/useRoute";
+import axiosInstance from "../../utils/axiosInstance";
 
 export default function Join() {
   const [join, setJoin] = useState<user>({
@@ -21,8 +22,17 @@ export default function Join() {
     }
   };
 
+  const joinAxios = async () => {
+    try {
+      await axiosInstance.post("http://localhost:8080/join", join);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   const handleClick = () => {
     // JOIN 되는 API
+    joinAxios();
     navigate("/login");
     alert("회원가입 성공")
   };

@@ -1,14 +1,16 @@
 import { Link } from "react-router";
 import "./css/list.scss";
 import useRoute from "../hooks/useRoute";
-import useSWR, { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import { user } from "../interface";
 import axiosInstance from '../../utils/axiosInstance';
+import useFetch from "../hooks/useFetch";
 
 export default function Header() {
   // USER 정보 API
   const { navigate } = useRoute();
-  const { data: session, error: sessionErr } = useSWR<user>("http://localhost:8080/check-session")
+  const { data: session, error: sessionErr } = useFetch<user>("http://localhost:8080/check-session")
+  const { mutate } = useSWRConfig();
   const handlelogout = async () => {
     // 로그아웃 API
     await axiosInstance.get("http://localhost:8080/logout")

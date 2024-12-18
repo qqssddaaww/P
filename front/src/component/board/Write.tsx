@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "./css/list.scss";
 import "./css/ql.scss";
-import { Board, chBoard } from "../interface";
+import { Board, chBoard, user } from "../interface";
 import useRoute from "../hooks/useRoute";
-import useSWR, { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import axiosInstance from '../../utils/axiosInstance';
+import useFetch from "../hooks/useFetch";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
@@ -27,13 +28,13 @@ export default function Write() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
-  const { data: session } = useSWR("http://localhost:8080/check-session")
-
+  const { data: session } = useFetch<user>("http://localhost:8080/check-session")
+  const { mutate } = useSWRConfig();
   const value: Board = {
-    id: session.id,
+    id: session?.id,
     title: title,
     content: content,
-    author: session.name,
+    author: session?.name,
     date: formatDate,
     hits: 0,
   };
@@ -92,8 +93,8 @@ export default function Write() {
         <ReactQuill className="write-react-quill" modules={modules} onChange={setContent} value={content} />
       </div>
       <div className="write-button-div">
-        <button className="write-button-send" name={session.id === state?.id ? "change" : "save"} onClick={handleSend}>
-          {session.id === state?.id ? "수정" : "작성"}
+        <button className="write-button-send" name={session?.id === state?.id ? "change" : "save"} onClick={handleSend}>
+          {session?.id === state?.id ? "수정" : "작성"}
         </button>
       </div>
     </div>

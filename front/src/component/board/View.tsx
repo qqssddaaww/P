@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { Board } from "../interface";
+import { Board, user } from "../interface";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
 import useRoute from "../hooks/useRoute";
-import useSWR from "swr";
 import axiosInstance from '../../utils/axiosInstance';
+import useFetch from "../hooks/useFetch";
 
 export default function View() {
   // 커스텀 훅 만들어서 사용
-  const { data: session } = useSWR("http://localhost:8080/check-session")
+  const { data: session } = useFetch<user>("http://localhost:8080/check-session")
   // user 가져오는 API
   const { uid, navigate } = useRoute();
 

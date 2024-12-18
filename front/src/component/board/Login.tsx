@@ -2,7 +2,7 @@ import "./css/list.scss";
 import { useState } from "react";
 import { login } from "../interface";
 import useRoute from "../hooks/useRoute";
-import { mutate } from "swr";
+import { useSWRConfig } from "swr";
 import axiosInstance from '../../utils/axiosInstance';
 
 export default function Login() {
@@ -11,12 +11,12 @@ export default function Login() {
     pw: "",
   });
   const { navigate } = useRoute();
-  
+  const { mutate } = useSWRConfig();
+
   const loginAxios = async () => {
     try {
-      const res = await axiosInstance.post("http://localhost:8080/login", login);
+      await axiosInstance.post("http://localhost:8080/login", login);
       mutate("http://localhost:8080/check-session")
-      console.log(res.data)
       navigate("/")
     } catch (err) {
       console.log(err)
