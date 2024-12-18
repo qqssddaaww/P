@@ -4,9 +4,8 @@ import "./css/list.scss";
 import "./css/ql.scss";
 import { Board, chBoard, user } from "../interface";
 import useRoute from "../hooks/useRoute";
-import { useSWRConfig } from "swr";
 import axiosInstance from '../../utils/axiosInstance';
-import useFetch from "../hooks/useFetch";
+import { useQuery } from "@tanstack/react-query";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
@@ -28,8 +27,12 @@ export default function Write() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
-  const { data: session } = useFetch<user>("http://localhost:8080/check-session")
-  const { mutate } = useSWRConfig();
+  const { data: session } = useQuery({ queryKey: ["session"], queryFn : 
+    async () => {
+      const res = await axiosInstance.get<user>("http://localhost:8080/check-session")
+      return res.data
+    },
+  }) 
   const value: Board = {
     id: session?.id,
     title: title,
@@ -79,7 +82,6 @@ export default function Write() {
           // 게시판 수정 API
           axiosPost("http://localhost:8080/change-board", valueCh)
         }
-        mutate("http://localhost:8080/get-board");
         navigate("/", { replace: true });
       }
     } catch (e) {

@@ -1,23 +1,24 @@
 import { Link } from "react-router";
 import "./css/list.scss";
 import useRoute from "../hooks/useRoute";
-import { useSWRConfig } from "swr";
 import { user } from "../interface";
 import axiosInstance from '../../utils/axiosInstance';
-import useFetch from "../hooks/useFetch";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Header() {
   // USER 정보 API
   const { navigate } = useRoute();
-  const { data: session, error: sessionErr } = useFetch<user>("http://localhost:8080/check-session")
-  const { mutate } = useSWRConfig();
+  const { data: session } = useQuery({ queryKey: ["session"], queryFn : 
+    async () => {
+      const res = await axiosInstance.get<user>("http://localhost:8080/check-session")
+      return res.data
+    },
+  })  
   const handlelogout = async () => {
     // 로그아웃 API
     await axiosInstance.get("http://localhost:8080/logout")
-    mutate("http://localhost:8080/check-session")
     navigate("/");
   };
-  if (sessionErr) return <div>Failed to load</div>;
   return (
     <div className="list-header-div">
       <Link to={"/"} style={{ textDecoration: "none" }}>

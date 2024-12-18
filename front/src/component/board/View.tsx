@@ -1,36 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Board, user } from "../interface";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
 import useRoute from "../hooks/useRoute";
-import axiosInstance from '../../utils/axiosInstance';
-import useFetch from "../hooks/useFetch";
+import axiosInstance from "../../utils/axiosInstance";
+import { useQuery } from "@tanstack/react-query";
 
 export default function View() {
   // 커스텀 훅 만들어서 사용
-  const { data: session } = useFetch<user>("http://localhost:8080/check-session")
+  const { data: session } = useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const res = await axiosInstance.get<user>("http://localhost:8080/check-session");
+      return res.data;
+    },
+  });
   // user 가져오는 API
   const { uid, navigate } = useRoute();
 
   const [board, setBoard] = useState<Board>({
     id: "",
-    title: "",    
+    title: "",
     content: "",
     author: "",
     hits: 0,
   });
 
-  useEffect(() => {
-    const board = async () => {
-      try {
-        const res = await axiosInstance.get(`http://localhost:8080/get-one?uid=${uid}`);
-        setBoard(res.data);
-      } catch (e) {
-        console.log(e);
-      }
-    };
-    board();
-  }, [uid]);
+  const { isError, isPending } = useQuery({
+    queryKey: ["board", uid],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`http://localhost:8080/get-one?uid=${uid}`);
+      setBoard(res.data);
+      return res.data;
+    },
+  });
 
   const handleDelete = async () => {
     try {
@@ -44,6 +47,9 @@ export default function View() {
   const handleChange = () => {
     navigate(`/write`, { state: { title: board.title, content: board.content, uid: uid, id: board.id } });
   };
+
+  if (isError) return <div>{isError}</div>;
+  if (isPending) return <div>Loading...</div>;
   return (
     <>
       <div className="view-main-div">

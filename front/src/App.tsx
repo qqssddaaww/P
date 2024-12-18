@@ -5,9 +5,11 @@ import Write from "./component/board/Write";
 import Login from "./component/board/Login";
 import Layout from "./component/board/Layout";
 import Join from "./component/board/Join";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function App() {
-
   const router = createBrowserRouter([
     {
       path: "/",
@@ -24,7 +26,9 @@ export default function App() {
 
   return (
     <>
+      <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+      </QueryClientProvider>
     </>
   );
 }

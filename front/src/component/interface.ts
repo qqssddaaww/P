@@ -1,6 +1,6 @@
 export interface Board {
   uid?: number;
-  id: string | undefined;
+  id: string | undefined ;
   title: string;
   content: string;
   author: string | undefined;
