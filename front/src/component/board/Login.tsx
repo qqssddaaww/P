@@ -2,40 +2,40 @@ import "./css/list.scss";
 import { useState } from "react";
 import { login } from "../interface";
 import useRoute from "../hooks/useRoute";
-import axiosInstance from "../../utils/axiosInstance";
+import useLogInOut from "../hooks/useLogInOut";
 
 export default function Login() {
-  const [login, setLogin] = useState<login>({
+  const [userInfo, setUserInfo] = useState<login>({
     id: "",
     pw: "",
   });
   const { navigate } = useRoute();
-
-  const loginAxios = async () => {
-    try {
-      await axiosInstance.post("http://localhost:8080/login", login);
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // login logout 커스텀 훅
+  const { login } = useLogInOut();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     if (name === "id") {
-      setLogin({ ...login, id: e.target.value });
+      setUserInfo({ ...userInfo, id: e.target.value });
     } else {
-      setLogin({ ...login, pw: e.target.value });
+      setUserInfo({ ...userInfo, pw: e.target.value });
     }
   };
 
-  const handleClick = () => {
-    //  로그인되는 API
-    loginAxios();
-  };
-  const handleJoin = () => {
-    navigate("/join");
-  };
+  // click 이벤트를 모아둠
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const name = e.currentTarget.name;
+    switch (name) {
+      case "login" :
+        login(userInfo);
+        navigate("/");
+        break;
+      case "join" :
+        navigate("/join");
+        break;
+      default:
+    }
+  }
 
   return (
     <div className="login-main-div">
@@ -45,11 +45,11 @@ export default function Login() {
           <input className="login-input-style" type="text" name="id" onChange={handleChange} placeholder="ID" />
           <input className="login-input-style" type="password" name="pw" onChange={handleChange} placeholder="PW" />
           <div>
-            <button className="login-button-style" onClick={handleClick}>
+            <button className="login-button-style" name="login" onClick={handleClick}>
               로그인
             </button>
             <div></div>
-            <button className="login-button-style" onClick={handleJoin}>
+            <button className="login-button-style" name="join" onClick={handleClick}>
               회원가입
             </button>
           </div>

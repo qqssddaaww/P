@@ -2,35 +2,18 @@ import { Link } from "react-router";
 import "./css/list.scss";
 import Pagination from "./Pagination";
 import useRoute from "../hooks/useRoute";
-import { Board, user } from "../interface";
+import { Board } from "../interface";
 import axiosInstance from "../../utils/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import useSession from "../hooks/useSession";
+import useQueryList from "../hooks/useQueryList";
 
 export default function List() {
   const { page, param } = useRoute();
   // 커스텀 훅 만들어서 사용
   // user, boards, size 가져오는 api
-  const { data: session } = useQuery({
-    queryKey: ["session"],
-    queryFn: async () => {
-      const res = await axiosInstance.get<user>("http://localhost:8080/check-session");
-      return res.data;
-    },
-  });
-  const { data: size } = useQuery({
-    queryKey: ["boards"],
-    queryFn: async () => {
-      const res = await axiosInstance.get<Board[]>(`http://localhost:8080/get-board`);
-      return res.data.length;
-    },
-  });
-  const { data: pagination } = useQuery({
-    queryKey: ["pagination", param],
-    queryFn: async () => {
-      const res = await axiosInstance.get(`http://localhost:8080/page-board?page=${param.page - 1}&size=${param.size}`);
-      return res.data;
-    },
-  });
+  const { session } = useSession();
+  const { size, pagination } = useQueryList(param);
+
 
   const handleHits = async (uid: number | undefined) => {
     try {

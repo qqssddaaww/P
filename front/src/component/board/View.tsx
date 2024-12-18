@@ -1,21 +1,17 @@
 import { useState } from "react";
-import { Board, user } from "../interface";
+import { Board } from "../interface";
 import "./css/list.scss";
 import DOMPurify from "dompurify";
 import useRoute from "../hooks/useRoute";
 import axiosInstance from "../../utils/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
+import useSession from "../hooks/useSession";
 
 export default function View() {
   // 커스텀 훅 만들어서 사용
-  const { data: session } = useQuery({
-    queryKey: ["session"],
-    queryFn: async () => {
-      const res = await axiosInstance.get<user>("http://localhost:8080/check-session");
-      return res.data;
-    },
-  });
   // user 가져오는 API
+  const { session } = useSession();
+  
   const { uid, navigate } = useRoute();
 
   const [board, setBoard] = useState<Board>({

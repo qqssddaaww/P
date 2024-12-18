@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "./css/list.scss";
 import "./css/ql.scss";
-import { Board, chBoard, user } from "../interface";
+import { Board, chBoard } from "../interface";
 import useRoute from "../hooks/useRoute";
 import axiosInstance from '../../utils/axiosInstance';
-import { useQuery } from "@tanstack/react-query";
+import useSession from "../hooks/useSession";
 
 const date: Date = new Date();
 const year: number = date.getFullYear();
@@ -27,12 +27,8 @@ export default function Write() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
-  const { data: session } = useQuery({ queryKey: ["session"], queryFn : 
-    async () => {
-      const res = await axiosInstance.get<user>("http://localhost:8080/check-session")
-      return res.data
-    },
-  }) 
+  const { session } = useSession();
+  
   const value: Board = {
     id: session?.id,
     title: title,
